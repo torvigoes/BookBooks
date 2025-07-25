@@ -1,0 +1,87 @@
+﻿@model HomeModel
+@{
+    ViewData["Title"] = "Listagem de livros";
+}
+
+<div class="text-center">
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary" role="button" asp-asp-controller="Livro" asp-action="CreateBook">+</a>
+    </div>
+    <br/>
+
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Título</th>
+                <th scope="col">Autor</th>
+                <th scope="col">Ano</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>2025</td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a role="button" class="btn btn-primary" asp-asp-controller="Livro" asp-action="UpdateBook">Editar</a>
+                        <a role="button" class="btn btn-danger open-delete-modal" data-url="@Url.Action("DeleteModelPartial")">Excluir</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>2025</td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a role="button" class="btn btn-primary" asp-asp-controller="Livro" asp-action="UpdateBook">Editar</a>
+                        <a role="button" class="btn btn-danger">Excluir</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>2025</td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a role="button" class="btn btn-primary" asp-asp-controller="Livro" asp-action="UpdateBook">Editar</a>
+                        <a role="button" class="btn btn-danger">Excluir</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="modal-placeholder"></div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('.open-delete-modal').on('click', function () {
+                var url = $(this).data('url');
+
+                $('#modal-placeholder').load(url, function () {
+
+                    var modalElement = $('#modal-placeholder').find('.modal');
+                    var modalInstance = new bootstrap.Modal(modalElement[0]);
+                    modalInstance.show();
+
+                    // Opcional: limpa o placeholder quando o modal é fechado
+                    modalElement.on('hidden.bs.modal', function () {
+                        $('#modal-placeholder').empty();
+                    });
+                });
+            });
+        });
+    </script>
+}
