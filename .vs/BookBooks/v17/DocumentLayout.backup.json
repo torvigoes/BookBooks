@@ -1,46 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\",
+  "WorkspaceRootPath": "C:\\Users\\Vitor\\Projects\\CSharp\\BookBooks\\BookBooks\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\views\\livro\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\views\\livro\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\views\\shared\\_deletebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\views\\shared\\_deletebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\controllers\\livrocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\controllers\\livrocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\views\\livro\\updatebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\views\\livro\\updatebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\views\\livro\\createbook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\views\\livro\\createbook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|c:\\users\\vitor\\projects\\csharp\\mvcsite\\mvcsite\\mvcsite\\models\\homemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25AB1FC0-F535-4662-B0AA-5733EF2A8B9E}|MVCsite\\MVCsite.csproj|solutionrelative:mvcsite\\models\\homemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{664F85E9-5DC4-B6A5-9C19-3B8196BA0C93}|BookBooks.csproj|c:\\users\\vitor\\projects\\csharp\\bookbooks\\bookbooks\\bookbooks\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{664F85E9-5DC4-B6A5-9C19-3B8196BA0C93}|BookBooks.csproj|solutionrelative:bookbooks\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,139 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Program.cs",
-              "RelativeDocumentMoniker": "MVCsite\\Program.cs",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Program.cs",
-              "RelativeToolTip": "MVCsite\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-25T18:29:25.795Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "MVCsite\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "MVCsite\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAIwBcAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-25T18:39:36.349Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Livro\\Index.cshtml",
-              "RelativeDocumentMoniker": "MVCsite\\Views\\Livro\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Livro\\Index.cshtml",
-              "RelativeToolTip": "MVCsite\\Views\\Livro\\Index.cshtml",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAACYAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-25T19:36:56.964Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "_DeleteBook.cshtml",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Shared\\_DeleteBook.cshtml",
-              "RelativeDocumentMoniker": "MVCsite\\Views\\Shared\\_DeleteBook.cshtml",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Shared\\_DeleteBook.cshtml",
-              "RelativeToolTip": "MVCsite\\Views\\Shared\\_DeleteBook.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-25T21:11:13.274Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "LivroController.cs",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Controllers\\LivroController.cs",
-              "RelativeDocumentMoniker": "MVCsite\\Controllers\\LivroController.cs",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Controllers\\LivroController.cs",
-              "RelativeToolTip": "MVCsite\\Controllers\\LivroController.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAgwCAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-25T21:01:15.352Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UpdateBook.cshtml",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Livro\\UpdateBook.cshtml",
-              "RelativeDocumentMoniker": "MVCsite\\Views\\Livro\\UpdateBook.cshtml",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Livro\\UpdateBook.cshtml",
-              "RelativeToolTip": "MVCsite\\Views\\Livro\\UpdateBook.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-25T20:31:01.378Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "CreateBook.cshtml",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Livro\\CreateBook.cshtml",
-              "RelativeDocumentMoniker": "MVCsite\\Views\\Livro\\CreateBook.cshtml",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Views\\Livro\\CreateBook.cshtml",
-              "RelativeToolTip": "MVCsite\\Views\\Livro\\CreateBook.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-25T20:01:32.466Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "site.css",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\wwwroot\\css\\site.css",
-              "RelativeDocumentMoniker": "MVCsite\\wwwroot\\css\\site.css",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\wwwroot\\css\\site.css",
-              "RelativeToolTip": "MVCsite\\wwwroot\\css\\site.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-07-25T18:49:10.579Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
               "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "MVCsite\\Controllers\\HomeController.cs",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "MVCsite\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\BookBooks\\BookBooks\\BookBooks\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "BookBooks\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\BookBooks\\BookBooks\\BookBooks\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "BookBooks\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-25T18:31:41.398Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "HomeModel.cs",
-              "DocumentMoniker": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Models\\HomeModel.cs",
-              "RelativeDocumentMoniker": "MVCsite\\Models\\HomeModel.cs",
-              "ToolTip": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\Models\\HomeModel.cs",
-              "RelativeToolTip": "MVCsite\\Models\\HomeModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-25T18:44:15.111Z",
+              "WhenOpened": "2025-07-25T22:04:36.183Z",
               "EditorCaption": ""
             }
           ]

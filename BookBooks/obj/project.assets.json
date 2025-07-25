@@ -786,11 +786,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\MVCsite.csproj",
-      "projectName": "MVCsite",
-      "projectPath": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\MVCsite.csproj",
+      "projectUniqueName": "C:\\Users\\Vitor\\Projects\\CSharp\\BookBooks\\BookBooks\\BookBooks\\BookBooks.csproj",
+      "projectName": "BookBooks",
+      "projectPath": "C:\\Users\\Vitor\\Projects\\CSharp\\BookBooks\\BookBooks\\BookBooks\\BookBooks.csproj",
       "packagesPath": "C:\\Users\\Vitor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Vitor\\Projects\\CSharp\\MVCsite\\MVCsite\\MVCsite\\obj\\",
+      "outputPath": "C:\\Users\\Vitor\\Projects\\CSharp\\BookBooks\\BookBooks\\BookBooks\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
