@@ -7,13 +7,8 @@ namespace BookBooks.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {
-            HomeModel home = new HomeModel();
-
-            home.Nome = "Vítor Góes";
-            home.Email = "vitornevesgoes@gmail.com";
-
-            return View(home);
+        { 
+            return View();
         }
 
         public IActionResult Privacy()
