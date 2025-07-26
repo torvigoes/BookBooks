@@ -53,3 +53,12 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 *.vsidx
+
+.vs/
+.vscode/
+secrets.json
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
