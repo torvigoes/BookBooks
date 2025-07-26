@@ -54,6 +54,7 @@ TestResult.xml
 nunit-*.xml
 *.vsidx
 
+<<<<<<< HEAD
 .vs/
 .vscode/
 secrets.json
@@ -62,3 +63,10 @@ secrets.json
 *.userosscache
 *.sln.docstates
 
+=======
+# User Secrets
+secrets.json
+
+# Local development settings
+appsettings.Development.json
+>>>>>>> 2084b7a (sql server connection + adicionar and obter)

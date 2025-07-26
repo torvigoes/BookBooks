@@ -1,4 +1,6 @@
-﻿@model HomeModel
+﻿@using BookBooks.Models
+
+@model List<LivroModel>
 @{
     ViewData["Title"] = "Listagem de livros";
 }
@@ -6,7 +8,7 @@
 <div class="text-center">
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-        <a class="btn btn-primary" role="button" asp-asp-controller="Livro" asp-action="CreateBook">+</a>
+        <a class="btn btn-primary" role="button" asp-controller="Livro" asp-action="AdicionarLivro">+</a>
     </div>
     <br/>
 
@@ -22,42 +24,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>2025</td>
-                <td>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <a role="button" class="btn btn-primary" asp-asp-controller="Livro" asp-action="UpdateBook">Editar</a>
-                        <a role="button" class="btn btn-danger open-delete-modal" data-url="@Url.Action("DeleteModelPartial")">Excluir</a>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>2025</td>
-                <td>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <a role="button" class="btn btn-primary" asp-asp-controller="Livro" asp-action="UpdateBook">Editar</a>
-                        <a role="button" class="btn btn-danger">Excluir</a>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>2025</td>
-                <td>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <a role="button" class="btn btn-primary" asp-asp-controller="Livro" asp-action="UpdateBook">Editar</a>
-                        <a role="button" class="btn btn-danger">Excluir</a>
-                    </div>
-                </td>
-            </tr>
+            @if(Model != null && Model.Any())
+            foreach(LivroModel livro in Model)
+                {
+                    <tr>
+                        <th scope="row">@livro.Id</th>
+                        <td>@livro.Titulo</td>
+                        <td>@livro.Autor</td>
+                        <td>@livro.AnoPublicacao</td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a role="button" class="btn btn-primary" asp-route-itemid="@livro.Id" asp-controller="Livro" asp-action="EditarLivro">Editar</a>
+                                <a role="button" class="btn btn-danger open-delete-modal" asp-route-itemid="@livro.Id" data-url="@Url.Action("OpenDeleteModelPartial")">Excluir</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
         </tbody>
     </table>
 </div>

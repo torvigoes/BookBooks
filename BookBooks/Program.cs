@@ -1,8 +1,15 @@
+using BookBooks.Data;
+using BookBooks.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews().
     AddRazorRuntimeCompilation();
+
+var connectionString = builder.Configuration.GetConnectionString("DataBase");
+builder.Services.AddDbContext<BancoContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 
 var app = builder.Build();
 

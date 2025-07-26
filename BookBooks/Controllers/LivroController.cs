@@ -1,32 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookBooks.Models;
+using BookBooks.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookBooks.Controllers
 {
     public class LivroController : Controller
     {
+        private readonly ILivroRepository _livroRepository;
+        public LivroController(ILivroRepository livroRepository)
+        {
+            _livroRepository = livroRepository;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            List<LivroModel> livros = _livroRepository.ObterTodos();
+            return View(livros);
         }
 
-        public IActionResult CreateBook()
+        public IActionResult AdicionarLivro()
         {
             return View();
         }
 
-        public IActionResult UpdateBook()
+        public IActionResult EditarLivro()
         {
             return View();
         }
 
-        public IActionResult DeleteBook()
+        public IActionResult ExcluirLivro()
         {
             return View();
         }
 
-        public IActionResult DeleteModelPartial()
+        public IActionResult OpenDeleteModelPartial()
         {
             return PartialView("~/Views/Shared/_DeleteBook.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult Criar(LivroModel livro)
+        {
+            _livroRepository.Adicionar(livro);
+            return RedirectToAction("Index");
         }
     }
 }
