@@ -17,11 +17,43 @@ namespace BookBooks.Repositories
             return _bancoContext.Livros.ToList();
         }
 
+        public LivroModel ListarPorId(int id)
+        {
+            return _bancoContext.Livros.FirstOrDefault(x => x.Id == id);
+        }
+
         public LivroModel Adicionar(LivroModel livro)
         {
             _bancoContext.Livros.Add(livro);
             _bancoContext.SaveChanges();
             return livro;
+        }
+
+        public void Remover(int id)
+        {
+            var livro = new LivroModel { Id = id };
+            _bancoContext.Livros.Attach(livro);
+            _bancoContext.Livros.Remove(livro);
+            _bancoContext.SaveChanges();
+        }
+
+        public LivroModel Atualizar(LivroModel livro)
+        {
+            LivroModel livroDB = ListarPorId(livro.Id);
+
+            if (livroDB == null)
+                throw new Exception("Houve um erro na atualização do Livro");
+            else
+            {
+                livroDB.Titulo = livro.Titulo;
+                livroDB.Autor = livro.Autor;
+                livroDB.AnoPublicacao = livro.AnoPublicacao;
+            }
+
+            _bancoContext.Update(livroDB);
+            _bancoContext.SaveChanges();
+
+            return livroDB;
         }
     }
 }

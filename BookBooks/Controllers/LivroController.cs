@@ -1,4 +1,5 @@
-﻿using BookBooks.Models;
+﻿using BookBooks.Data;
+using BookBooks.Models;
 using BookBooks.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,25 +24,36 @@ namespace BookBooks.Controllers
             return View();
         }
 
-        public IActionResult EditarLivro()
+        public IActionResult EditarLivro(int id)
         {
-            return View();
+            LivroModel livro = _livroRepository.ListarPorId(id);
+            return View(livro);
         }
 
-        public IActionResult ExcluirLivro()
+        public IActionResult OpenDeleteModelPartial(int id)
         {
-            return View();
-        }
-
-        public IActionResult OpenDeleteModelPartial()
-        {
-            return PartialView("~/Views/Shared/_DeleteBook.cshtml");
+            LivroModel livro = _livroRepository.ListarPorId(id);
+            return PartialView("~/Views/Shared/_DeleteBook.cshtml", livro);
         }
 
         [HttpPost]
         public IActionResult Criar(LivroModel livro)
         {
             _livroRepository.Adicionar(livro);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Alterar(LivroModel livro)
+        {
+            _livroRepository.Atualizar(livro);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Excluir(int id)
+        {
+            _livroRepository.Remover(id);
             return RedirectToAction("Index");
         }
     }

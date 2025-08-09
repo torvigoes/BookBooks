@@ -6,5 +6,8 @@ namespace BookBooks.Repositories
     {
         List<LivroModel> ObterTodos();
         LivroModel Adicionar(LivroModel livro);
+        LivroModel Atualizar(LivroModel livro);
+        void Remover(int id);
+        LivroModel ListarPorId(int id);
     }
 }
