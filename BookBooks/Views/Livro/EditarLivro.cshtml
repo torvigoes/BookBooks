@@ -12,15 +12,18 @@
     <div class="form-group">
         <label for="titulo">Título do Livro</label>
         <input type="text" asp-for="Titulo" class="form-control" placeholder="Digite o título do livro">
+        @Html.ValidationMessageFor(x => x.Titulo)
         <small id="emailHelp" class="form-text text-muted">Não são necessários subtítulos</small>
     </div>
     <div class="form-group">
         <label for="autor">Autor</label>
         <input type="text" asp-for="Autor" class="form-control" placeholder="Digite o(s) autor(es) do livro">
+        @Html.ValidationMessageFor(x => x.Autor)
     </div>
     <div class="form-group">
         <label for="ano">Ano de publicação</label>
         <input type="number" asp-for="AnoPublicacao" class="form-control" placeholder="Digite o ano de publicação">
+        @Html.ValidationMessageFor(x => x.AnoPublicacao)
     </div>
     <br />
     <button type="submit" class="btn btn-primary w-100 d-block" style="margin-bottom: 10px">Alterar</button>

@@ -21,3 +21,7 @@ body {
     background-color: #DAD7CD;
     margin-bottom: 60px;
 }
+
+.field-validation-error{
+    color: red;
+}

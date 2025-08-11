@@ -39,15 +39,26 @@ namespace BookBooks.Controllers
         [HttpPost]
         public IActionResult Criar(LivroModel livro)
         {
-            _livroRepository.Adicionar(livro);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _livroRepository.Adicionar(livro);
+                return RedirectToAction("Index");
+            }
+            else
+                return View(livro);
         }
 
         [HttpPost]
         public IActionResult Alterar(LivroModel livro)
         {
-            _livroRepository.Atualizar(livro);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _livroRepository.Atualizar(livro);
+                return RedirectToAction("Index");
+            }
+            else
+                return View("EditarLivro", livro);
+
         }
 
         [HttpPost]
