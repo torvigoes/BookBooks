@@ -39,33 +39,64 @@ namespace BookBooks.Controllers
         [HttpPost]
         public IActionResult Criar(LivroModel livro)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _livroRepository.Adicionar(livro);
+                if (ModelState.IsValid)
+                {
+                    _livroRepository.Adicionar(livro);
+                    TempData["MsgSucesso"] = "Livro cadastrado com sucesso!";
+                    return RedirectToAction("Index");
+                }
+                else
+                    return View(livro);
+            }
+            catch (System.Exception erro)
+            {
+                TempData["MsgErro"] = $"Não foi possível cadastrar o livro, tente novamente! Detalhes do erro: {erro.Message}";
                 return RedirectToAction("Index");
             }
-            else
-                return View(livro);
         }
 
         [HttpPost]
         public IActionResult Alterar(LivroModel livro)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _livroRepository.Atualizar(livro);
+                if (ModelState.IsValid)
+                {
+                    _livroRepository.Atualizar(livro);
+                    TempData["MsgSucesso"] = "Livro alterado com sucesso!";
+                    return RedirectToAction("Index");
+                }
+                else
+                    return View("EditarLivro", livro);
+            }
+            catch (System.Exception erro)
+            {
+                TempData["MsgErro"] = $"Não foi possível atualizar o livro, tente novamente! Detalhes do erro: {erro.Message}";
                 return RedirectToAction("Index");
             }
-            else
-                return View("EditarLivro", livro);
-
         }
 
         [HttpPost]
         public IActionResult Excluir(int id)
         {
-            _livroRepository.Remover(id);
-            return RedirectToAction("Index");
+            try
+            {
+                bool apagado = _livroRepository.Remover(id);
+
+                if (apagado)
+                    TempData["MsgSucesso"] = "Livro removido com sucesso!";
+                else
+                    TempData["MsgSucesso"] = "Houve um erro ao remover o livro!";
+
+                return RedirectToAction("Index");
+            }
+            catch(System.Exception erro)
+            {
+                TempData["MsgErro"] = $"Não foi possível excluir o livro, tente novamente! Detalhes do erro: {erro.Message}";
+                return RedirectToAction("Index");
+            }
         }
     }
 }

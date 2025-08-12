@@ -12,6 +12,24 @@
     </div>
     <br/>
 
+    @if (TempData["MsgSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MsgSucesso"]
+        </div>
+    }
+
+    @if (TempData["MsgErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MsgErro"]
+        </div>
+    }
+
+    <br/>
+
     <h1 class="display-4">@ViewData["Title"]</h1>
 
     <table class="table">
@@ -48,25 +66,3 @@
 </div>
 
 <div id="modal-placeholder"></div>
-
-@section Scripts {
-    <script>
-        $(function () {
-            $('.open-delete-modal').on('click', function () {
-                var url = $(this).data('url');
-
-                $('#modal-placeholder').load(url, function () {
-
-                    var modalElement = $('#modal-placeholder').find('.modal');
-                    var modalInstance = new bootstrap.Modal(modalElement[0]);
-                    modalInstance.show();
-
-                    // Opcional: limpa o placeholder quando o modal é fechado
-                    modalElement.on('hidden.bs.modal', function () {
-                        $('#modal-placeholder').empty();
-                    });
-                });
-            });
-        });
-    </script>
-}

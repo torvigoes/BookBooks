@@ -29,12 +29,20 @@ namespace BookBooks.Repositories
             return livro;
         }
 
-        public void Remover(int id)
+        public Boolean Remover(int id)
         {
-            var livro = new LivroModel { Id = id };
-            _bancoContext.Livros.Attach(livro);
-            _bancoContext.Livros.Remove(livro);
-            _bancoContext.SaveChanges();
+            try
+            {
+                var livro = new LivroModel { Id = id };
+                _bancoContext.Livros.Attach(livro);
+                _bancoContext.Livros.Remove(livro);
+                _bancoContext.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public LivroModel Atualizar(LivroModel livro)
