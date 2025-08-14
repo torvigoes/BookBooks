@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews().
 var connectionString = builder.Configuration.GetConnectionString("DataBase");
 builder.Services.AddDbContext<BancoContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 var app = builder.Build();
 

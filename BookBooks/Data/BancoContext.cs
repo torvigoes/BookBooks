@@ -11,5 +11,6 @@ namespace BookBooks.Data
         }
 
         public DbSet<LivroModel> Livros { get; set; }
+        public DbSet<UsuarioModel> Usuarios { get; set; }
     }
 }

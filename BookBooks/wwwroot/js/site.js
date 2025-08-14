@@ -1,36 +1,41 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(document).ready(function () {
+    if ($('#table-livros').length) {
+        getDatatable('#table-livros');
+    }
+    if ($('#table-usuarios').length) {
+        getDatatable('#table-usuarios');
+    }
+});
 
-// O $(function() { ... }); é a forma curta e moderna de $(document).ready(function() { ... });
-$(function () {
-    $('#table-livros').DataTable({
-        "ordering": true,
-        "paging": true,
-        "searching": true,
-        "oLanguage": {
-            "sEmptyTable": "Nenhum registro encontrado na tabela",
-            "sInfo": "Mostrar _START_ até _END_ de _TOTAL_ registros",
-            "sInfoEmpty": "Mostrar 0 até 0 de 0 Registros",
-            "sInfoFiltered": "(Filtrar de _MAX_ total registros)",
-            "sInfoPostFix": "",
-            "sInfoThousands": ".",
-            "sLengthMenu": "Mostrar _MENU_ registros por pagina",
-            "sLoadingRecords": "Carregando...",
-            "sProcessing": "Processando...",
-            "sZeroRecords": "Nenhum registro encontrado",
-            "sSearch": "Pesquisar",
-            "oPaginate": {
-                "sNext": ">",
-                "sPrevious": "<",
-                "sFirst": "<<",
-                "sLast": ">>"
+function getDatatable(id) {
+    $(id).DataTable({
+        ordering: true,
+        paging: true,
+        searching: true,
+        responsive: true,
+        language: {
+            emptyTable: "Nenhum registro encontrado na tabela",
+            info: "Mostrando _START_ até _END_ de _TOTAL_ registros",
+            infoEmpty: "Mostrando 0 até 0 de 0 registros",
+            infoFiltered: "(filtrado de _MAX_ registros no total)",
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            loadingRecords: "Carregando...",
+            processing: "Processando...",
+            search: "Pesquisar:",
+            zeroRecords: "Nenhum registro encontrado",
+            paginate: {
+                first: "Primeiro",
+                last: "Último",
+                next: "Próximo",
+                previous: "Anterior"
             },
-            "oAria": {
-                "sSortAscending": ": Ordenar colunas de forma ascendente",
-                "sSortDescending": ": Ordenar colunas de forma descendente"
+            aria: {
+                sortAscending: ": ativar para classificar a coluna em ordem crescente",
+                sortDescending: ": ativar para classificar a coluna em ordem decrescente"
             }
         }
     });
+}
 
     $('.close-alert').click(function () {
         $('.alert').hide('hide');
@@ -49,5 +54,3 @@ $(function () {
             });
         });
     });
-
-});
