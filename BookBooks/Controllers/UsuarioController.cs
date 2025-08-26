@@ -22,6 +22,13 @@ namespace BookBooks.Controllers
         {
             return View();
         }
+
+        public IActionResult Edit(int id)
+        {
+            UsuarioModel user = _usuarioRepository.ListarPorId(id);
+            return View(user);
+        }
+
         public IActionResult OpenDeleteModelPartial(int id)
         {
             UsuarioModel user = _usuarioRepository.ListarPorId(id);
@@ -45,6 +52,37 @@ namespace BookBooks.Controllers
             catch (System.Exception erro)
             {
                 TempData["MsgErro"] = $"Não foi possível cadastrar o Usuário, tente novamente! Detalhes do erro: {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(UserViewModel userWithoutPw)
+        {
+            try
+            {
+                UsuarioModel user;
+                if (ModelState.IsValid)
+                {
+                    user = new UsuarioModel()
+                    {
+                        Id = userWithoutPw.Id,
+                        Perfil = userWithoutPw.Perfil,
+                        Nome = userWithoutPw.Nome,
+                        Login = userWithoutPw.Login,
+                        Email = userWithoutPw.Email
+                    };
+
+                    user = _usuarioRepository.Atualizar(user);
+                    TempData["MsgSucesso"] = "Usuário alterado com sucesso!";
+                    return RedirectToAction("Index");
+                }
+                else
+                    return View("Edit", userWithoutPw);
+            }
+            catch (System.Exception erro)
+            {
+                TempData["MsgErro"] = $"Não foi possível atualizar o usuário, tente novamente! Detalhes do erro: {erro.Message}";
                 return RedirectToAction("Index");
             }
         }

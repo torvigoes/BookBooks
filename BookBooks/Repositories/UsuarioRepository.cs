@@ -61,6 +61,7 @@ namespace BookBooks.Repositories
                 throw new Exception("Houve um erro na atualização do Usuário.");
             else
             {
+                usuarioDB.Perfil = usuario.Perfil;
                 usuarioDB.Nome = usuario.Nome;
                 usuarioDB.Login = usuario.Login;
                 usuarioDB.Email = usuario.Email;
