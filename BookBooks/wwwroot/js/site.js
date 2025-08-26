@@ -24,10 +24,10 @@ function getDatatable(id) {
             search: "Pesquisar:",
             zeroRecords: "Nenhum registro encontrado",
             paginate: {
-                first: "Primeiro",
-                last: "Último",
-                next: "Próximo",
-                previous: "Anterior"
+                first: "<<",
+                last: ">>",
+                next: ">",
+                previous: "<"
             },
             aria: {
                 sortAscending: ": ativar para classificar a coluna em ordem crescente",

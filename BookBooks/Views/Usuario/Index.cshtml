@@ -60,9 +60,7 @@
                                    asp-route-id="@usuario.Id" asp-controller="Usuario" asp-action="Editar">Editar</a>
 
                                 <button role="button" class="btn btn-danger open-delete-modal"
-                                        asp-route-id="@usuario.Id" data-url="@Url.Action("OpenDeleteModelPartial", new { id = usuario.Id })">
-                                    Excluir
-                                </button>
+                                        asp-route-id="@usuario.Id" data-url="@Url.Action("OpenDeleteModelPartial", new { id = usuario.Id })">Excluir</button>
                             </div>
                         </td>
                     </tr>

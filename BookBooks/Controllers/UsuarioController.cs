@@ -22,6 +22,11 @@ namespace BookBooks.Controllers
         {
             return View();
         }
+        public IActionResult OpenDeleteModelPartial(int id)
+        {
+            UsuarioModel user = _usuarioRepository.ListarPorId(id);
+            return PartialView("~/Views/Shared/_DeleteUser.cshtml", user);
+        }
 
         [HttpPost]
         public IActionResult Criar(UsuarioModel usuario)
@@ -43,5 +48,27 @@ namespace BookBooks.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        [HttpPost]
+        public IActionResult Excluir(int id)
+        {
+            try
+            {
+                bool apagado = _usuarioRepository.Remover(id);
+
+                if (apagado)
+                    TempData["MsgSucesso"] = "Usuário removido com sucesso!";
+                else
+                    TempData["MsgSucesso"] = "Houve um erro ao remover o Usuário!";
+
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception erro)
+            {
+                TempData["MsgErro"] = $"Não foi possível excluir o usuário, tente novamente! Detalhes do erro: {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
+
     }
 }
