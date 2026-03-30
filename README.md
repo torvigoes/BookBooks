@@ -1,83 +1,104 @@
-# BookBooks ??
-
-BookBooks is a book-tracking social platform inspired by Letterboxd, built with .NET 9. It allows users to catalog books they have read, write reviews with ratings, organize books into custom lists, and follow other users to see their reading activity.
-
-## ?? Features
-
-- **Book Catalog:** Discover and keep track of books you want to read, are currently reading, or have already read.
-- **Reviews & Ratings:** Share your thoughts on books with rich text reviews (including spoiler tags) and a 1-5 star rating system.
-- **Custom Lists:** Curate your own custom book lists (e.g., "Favorites of 2024", "Sci-Fi Must Reads") with customizable visibility settings (Public, Private, Friends Only).
-- **Social Feed:** Follow other readers and stay up to date with their latest reads, reviews, and lists in a dynamic activity feed.
-- **Seamless Integrations:** Automated fetching of book metadata and cover images using the Open Library API.
-
-## ?? Tech Stack
-
-- **Backend:** C# / .NET 9
-- **Framework:** ASP.NET Core Web API
-- **Frontend / Client:** Blazor WebAssembly (BookBooks.Web)
-- **Database:** SQL Server
-- **ORM:** Entity Framework Core (Code First)
-- **Authentication:** ASP.NET Core Identity + JWT Bearer Tokens
-- **Architecture:** Clean Architecture & CQRS Pattern
-
-## ??? Project Structure
-
-The solution follows Clean Architecture principles, ensuring a separation of concerns and maintaining low coupling:
-
-- `BookBooks.Domain` - Core entities, enums, domain interfaces, and domain events.
-- `BookBooks.Application` - Use cases (Commands/Queries), DTOs, validators, and mapping logic.
-- `BookBooks.Infrastructure` - EF Core DbContext, repository implementations, Auth configurations, and external integrations (Open Library).
-- `BookBooks.API` - ASP.NET Core controllers, middleware, and Dependency Injection wiring.
-- `BookBooks.Web` - The client application (Blazor WebAssembly).
-
-## ??? Getting Started
-
-### Prerequisites
-
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- SQL Server (or SQL Server Express / LocalDB for local development)
-- Visual Studio 2022, JetBrains Rider, or VS Code
-
-### Run Locally
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/torvigoes/BookBooks.git
-   cd BookBooks
-   ```
-
-2. **Configure the Database Connection:**
-   Open `BookBooks.API/appsettings.Development.json` and configure your `DefaultConnection` string.
-
-3. **Apply Entity Framework Migrations:**
-   Navigate into the `BookBooks.API` directory (or use the Package Manager Console) and run:
-   ```bash
-   dotnet ef database update --project ../BookBooks.Infrastructure --startup-project .
-   ```
-
-4. **Run the API:**
-   ```bash
-   cd BookBooks.API
-   dotnet run
-   ```
-   The API will typically be exposed at `https://localhost:5001` or `http://localhost:5000` (check `Properties/launchSettings.json`).
-
-5. **Run the Blazor Application:**
-   Open a new terminal window:
-   ```bash
-   cd BookBooks.Web
-   dotnet run
-   ```
-
-## ?? Contributing
-
-Contributions are welcome! If you have suggestions or want to add a feature:
-1. Fork the project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the Branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
-
-## ?? License
-
+📚 Bookboxd
+Bookboxd is a social platform for book lovers — inspired by Letterboxd — built with .NET 9.  
+Track your reading, write reviews, create lists, and follow other readers in a modern social experience.
+---
+🚀 Features
+📖 Book Tracking  
+Organize books into Want to Read, Reading, and Read.
+⭐ Reviews & Ratings  
+Write reviews with spoiler support and rate books from 1 to 5 stars.
+🗂️ Custom Lists  
+Create curated lists like “Best of 2024” with privacy control:
+Public
+Private
+Friends only
+🧑‍🤝‍🧑 Social Feed  
+Follow users and see their activity (reviews, ratings, lists) in real time.
+🔗 External Integrations  
+Automatic book metadata and covers via Open Library API.
+---
+🧰 Tech Stack
+Layer	Technology
+Backend	C# / .NET 9
+API	ASP.NET Core Web API
+Frontend	Blazor WebAssembly
+Database	SQL Server
+ORM	Entity Framework Core
+Auth	ASP.NET Identity + JWT
+Architecture	Clean Architecture + CQRS
+---
+🏗️ Architecture
+This project follows Clean Architecture, ensuring low coupling and clear separation of concerns:
+API ─────────▶ Application ─────────▶ Domain
+│                 ▲
+│                 │
+└────────▶ Infrastructure ────────┘
+📦 Projects
+Bookboxd.Domain  
+Core business rules, entities, and value objects.
+Bookboxd.Application  
+Use cases (CQRS), DTOs, validations, and interfaces.
+Bookboxd.Infrastructure  
+Database (EF Core), external services, and implementations.
+Bookboxd.API  
+Controllers, middleware, and dependency injection.
+Bookboxd.Web  
+Blazor WebAssembly client.
+---
+⚡ Getting Started
+✅ Prerequisites
+.NET 9 SDK
+SQL Server (or LocalDB)
+Visual Studio / Rider / VS Code
+---
+▶️ Run Locally
+```bash
+git clone https://github.com/torvigoes/BookBooks.git
+cd BookBooks
+```
+1. Configure Database
+Edit:
+```
+Bookboxd.API/appsettings.Development.json
+```
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "your_connection_string"
+}
+```
+---
+2. Apply Migrations
+```bash
+dotnet ef database update \
+  --project Bookboxd.Infrastructure \
+  --startup-project Bookboxd.API
+```
+---
+3. Run API
+```bash
+cd Bookboxd.API
+dotnet run
+```
+---
+4. Run Web App
+```bash
+cd Bookboxd.Web
+dotnet run
+```
+---
+🧪 Future Improvements
+🧠 AI-powered recommendations
+📊 Reading statistics dashboard
+🔔 Notifications system
+---
+🤝 Contributing
+Contributions are welcome!
+```bash
+git checkout -b feature/your-feature
+git commit -m "feat: add new feature"
+git push origin feature/your-feature
+```
+Then open a Pull Request 🚀
+---
+📄 License
 This project is licensed under the MIT License.
