@@ -44,3 +44,88 @@ API ─────────▶ Application ─────────▶ Do
  │                ▲
  │                │
  └────────▶ Infrastructure ────────┘
+````
+
+### 📦 Projects
+
+  * **`Bookboxd.Domain`**: Core business rules, entities, and value objects.
+  * **`Bookboxd.Application`**: Use cases (CQRS), DTOs, validations, and interfaces.
+  * **`Bookboxd.Infrastructure`**: Database (EF Core), external services, and implementations.
+  * **`Bookboxd.API`**: Controllers, middleware, and dependency injection.
+  * **`Bookboxd.Web`**: Blazor WebAssembly client.
+
+-----
+
+## ⚡ Getting Started
+
+### ✅ Prerequisites
+
+  * [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+  * SQL Server (or LocalDB)
+  * Visual Studio / Rider / VS Code
+
+### ▶️ Run Locally
+
+**1. Clone the repository**
+
+```bash
+git clone [https://github.com/torvigoes/BookBooks.git](https://github.com/torvigoes/BookBooks.git)
+cd BookBooks
+```
+
+**2. Configure Database**
+Edit `Bookboxd.API/appsettings.Development.json` to include your connection string:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Database=Bookboxd;Trusted_Connection=True;TrustServerCertificate=True;"
+}
+```
+
+**3. Apply Migrations**
+
+```bash
+dotnet ef database update --project Bookboxd.Infrastructure --startup-project Bookboxd.API
+```
+
+**4. Run the API**
+
+```bash
+cd Bookboxd.API
+dotnet run
+```
+
+**5. Run the Web App**
+
+```bash
+cd ../Bookboxd.Web
+dotnet run
+```
+
+-----
+
+## 🧪 Future Improvements
+
+  * 🧠 AI-powered recommendations
+  * 📊 Reading statistics dashboard
+  * 🔔 Notifications system
+
+-----
+
+## 🤝 Contributing
+
+Contributions are welcome\! If you'd like to help improve Bookboxd:
+
+```bash
+git checkout -b feature/your-feature
+git commit -m "feat: add new feature"
+git push origin feature/your-feature
+```
+
+Then open a Pull Request 🚀
+
+-----
+
+## 📄 License
+
+This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
