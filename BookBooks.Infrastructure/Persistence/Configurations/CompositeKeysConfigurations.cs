@@ -12,6 +12,17 @@ public class UserFollowConfiguration : IEntityTypeConfiguration<UserFollow>
     public void Configure(EntityTypeBuilder<UserFollow> builder)
     {
         builder.HasKey(f => new { f.FollowerId, f.FollowedId });
+
+        // Configure relationships and disable cascade delete to fix multiple paths issue
+        builder.HasOne(f => f.Follower)
+            .WithMany()
+            .HasForeignKey(f => f.FollowerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(f => f.Followed)
+            .WithMany()
+            .HasForeignKey(f => f.FollowedId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
 
@@ -20,6 +31,17 @@ public class ReviewLikeConfiguration : IEntityTypeConfiguration<ReviewLike>
     public void Configure(EntityTypeBuilder<ReviewLike> builder)
     {
         builder.HasKey(l => new { l.UserId, l.ReviewId });
+
+        // Configure relationships and disable cascade delete to fix multiple paths issue
+        builder.HasOne(l => l.User)
+            .WithMany()
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(l => l.Review)
+            .WithMany()
+            .HasForeignKey(l => l.ReviewId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
 
