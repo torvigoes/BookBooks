@@ -2,6 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @inject BooksApiClient BooksApiClient
 @inject ReviewsApiClient ReviewsApiClient
+@inject ReadingStatusApiClient ReadingStatusApiClient
 @inject AuthSession AuthSession
 @inject NavigationManager NavigationManager
 
@@ -21,7 +22,44 @@ else if (_book is not null)
     <p><strong>Autor:</strong> @_book.Author</p>
     <p><strong>Ano:</strong> @_book.Year</p>
     <p><strong>ISBN:</strong> @_book.Isbn</p>
-    <p><strong>Nota média:</strong> @_book.AverageRating.ToString("0.00") (@_book.ReviewCount avaliações)</p>
+    <p><strong>Nota media:</strong> @_book.AverageRating.ToString("0.00") (@_book.ReviewCount avaliacoes)</p>
+
+    @if (AuthSession.IsAuthenticated)
+    {
+        <section class="mt-4 mb-4">
+            <h2>Status de leitura</h2>
+
+            <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label" for="reading-status">Selecione o status</label>
+                    <InputSelect id="reading-status" class="form-select" @bind-Value="_selectedReadingStatus">
+                        <option value="@ReadingStatusType.WantToRead">Quero ler</option>
+                        <option value="@ReadingStatusType.CurrentlyReading">Lendo</option>
+                        <option value="@ReadingStatusType.Read">Lido</option>
+                        <option value="@ReadingStatusType.Abandoned">Abandonado</option>
+                    </InputSelect>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-outline-primary" disabled="@_isSavingReadingStatus" @onclick="SaveReadingStatusAsync">
+                        @(_isSavingReadingStatus ? "Salvando..." : "Salvar status")
+                    </button>
+                </div>
+            </div>
+
+            @if (_currentReadingStatus is not null)
+            {
+                <p class="mt-2 mb-0">
+                    Status atual: <strong>@FormatReadingStatus(_currentReadingStatus.Status)</strong>
+                    (atualizado em @_currentReadingStatus.UpdatedAt.ToLocalTime().ToString("g"))
+                </p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(_readingStatusError))
+            {
+                <p class="text-danger mt-2">@_readingStatusError</p>
+            }
+        </section>
+    }
 
     <h2 class="mt-4">Reviews</h2>
     @if (_reviews.Count == 0)
@@ -37,7 +75,7 @@ else if (_book is not null)
                 <p>@review.Content</p>
                 @if (review.ContainsSpoiler)
                 {
-                    <p><em>Contém spoiler.</em></p>
+                    <p><em>Contem spoiler.</em></p>
                 }
             </article>
         }
@@ -56,13 +94,13 @@ else if (_book is not null)
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="content">Conteúdo</label>
+                <label class="form-label" for="content">Conteudo</label>
                 <InputTextArea id="content" class="form-control" @bind-Value="_createReviewModel.Content" />
             </div>
 
             <div class="mb-3 form-check">
                 <InputCheckbox id="spoiler" class="form-check-input" @bind-Value="_createReviewModel.ContainsSpoiler" />
-                <label class="form-check-label" for="spoiler">Contém spoiler</label>
+                <label class="form-check-label" for="spoiler">Contem spoiler</label>
             </div>
 
             <button class="btn btn-primary" disabled="@_isSubmittingReview" type="submit">
@@ -89,8 +127,12 @@ else if (_book is not null)
     private List<ReviewDto> _reviews = [];
     private bool _isLoading = true;
     private bool _isSubmittingReview;
+    private bool _isSavingReadingStatus;
     private string? _loadError;
     private string? _reviewError;
+    private string? _readingStatusError;
+    private ReadingStatusDto? _currentReadingStatus;
+    private ReadingStatusType _selectedReadingStatus = ReadingStatusType.WantToRead;
     private readonly CreateReviewFormModel _createReviewModel = new();
 
     protected override async Task OnParametersSetAsync()
@@ -108,6 +150,11 @@ else if (_book is not null)
             _book = await BooksApiClient.GetByIdAsync(BookId);
             var reviews = await ReviewsApiClient.GetByBookAsync(BookId);
             _reviews = [.. reviews];
+
+            if (AuthSession.IsAuthenticated)
+            {
+                await LoadReadingStatusAsync();
+            }
         }
         catch (ApiException ex)
         {
@@ -116,6 +163,54 @@ else if (_book is not null)
         finally
         {
             _isLoading = false;
+        }
+    }
+
+    private async Task LoadReadingStatusAsync()
+    {
+        _readingStatusError = null;
+
+        try
+        {
+            _currentReadingStatus = await ReadingStatusApiClient.GetByBookAsync(BookId);
+            _selectedReadingStatus = _currentReadingStatus.Status;
+        }
+        catch (ApiException ex) when (ex.StatusCode == 404)
+        {
+            _currentReadingStatus = null;
+        }
+        catch (ApiException ex)
+        {
+            _readingStatusError = ex.Message;
+        }
+    }
+
+    private async Task SaveReadingStatusAsync()
+    {
+        _readingStatusError = null;
+        _isSavingReadingStatus = true;
+
+        try
+        {
+            _currentReadingStatus = await ReadingStatusApiClient.UpsertAsync(
+                BookId,
+                new UpdateReadingStatusRequest(_selectedReadingStatus));
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode == 401)
+            {
+                await AuthSession.SignOutAsync();
+                _readingStatusError = "Sua sessao expirou. Faca login novamente.";
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            _readingStatusError = ex.Message;
+        }
+        finally
+        {
+            _isSavingReadingStatus = false;
         }
     }
 
@@ -143,7 +238,7 @@ else if (_book is not null)
             if (ex.StatusCode == 401)
             {
                 await AuthSession.SignOutAsync();
-                _reviewError = "Sua sessão expirou. Faça login novamente.";
+                _reviewError = "Sua sessao expirou. Faca login novamente.";
                 NavigationManager.NavigateTo("/login");
                 return;
             }
@@ -167,5 +262,17 @@ else if (_book is not null)
         public string Content { get; set; } = string.Empty;
 
         public bool ContainsSpoiler { get; set; }
+    }
+
+    private static string FormatReadingStatus(ReadingStatusType status)
+    {
+        return status switch
+        {
+            ReadingStatusType.WantToRead => "Quero ler",
+            ReadingStatusType.CurrentlyReading => "Lendo",
+            ReadingStatusType.Read => "Lido",
+            ReadingStatusType.Abandoned => "Abandonado",
+            _ => status.ToString()
+        };
     }
 }

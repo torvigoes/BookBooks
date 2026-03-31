@@ -55,4 +55,32 @@ public sealed class ApiSmokeTests : IClassFixture<TestWebApplicationFactory>
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task GetReadingStatus_ShouldReturnUnauthorized_WhenNoBearerTokenIsProvided()
+    {
+        using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("https://localhost")
+        });
+
+        var response = await client.GetAsync("/api/books/book-1/reading-status");
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpsertReadingStatus_ShouldReturnUnauthorized_WhenNoBearerTokenIsProvided()
+    {
+        using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("https://localhost")
+        });
+
+        var payload = new { status = 0 };
+
+        var response = await client.PutAsJsonAsync("/api/books/book-1/reading-status", payload);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
 }
