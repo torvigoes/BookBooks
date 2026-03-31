@@ -6,8 +6,10 @@ import { finalize } from 'rxjs';
 import { ReviewsApiService } from '../../core/api/reviews-api.service';
 import { BooksApiService } from '../../core/api/books-api.service';
 import { HttpErrorService } from '../../core/api/http-error.service';
+import { ReadingStatusApiService } from '../../core/api/reading-status-api.service';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
 import { Book } from '../../core/models/book.model';
+import { ReadingStatusType } from '../../core/models/reading-status-type.enum';
 import { Review } from '../../core/models/review.model';
 
 @Component({
@@ -52,6 +54,25 @@ import { Review } from '../../core/models/review.model';
       </section>
 
       @if (authSession.isAuthenticated()) {
+        <section class="card">
+          <h3>Reading status</h3>
+          <form [formGroup]="readingStatusForm" (ngSubmit)="saveReadingStatus()">
+            <select formControlName="status">
+              <option [ngValue]="readingStatusType.WantToRead">Want to read</option>
+              <option [ngValue]="readingStatusType.CurrentlyReading">Currently reading</option>
+              <option [ngValue]="readingStatusType.Read">Read</option>
+              <option [ngValue]="readingStatusType.Abandoned">Abandoned</option>
+            </select>
+            <button type="submit" [disabled]="isSavingReadingStatus()">
+              {{ isSavingReadingStatus() ? 'Saving...' : 'Save status' }}
+            </button>
+          </form>
+
+          @if (currentReadingStatusUpdatedAt()) {
+            <p class="muted">Last updated: {{ currentReadingStatusUpdatedAt() }}</p>
+          }
+        </section>
+
         <section class="card">
           <h3>Add review</h3>
           <form [formGroup]="reviewForm" (ngSubmit)="createReview()">
@@ -111,7 +132,8 @@ import { Review } from '../../core/models/review.model';
     }
 
     input,
-    textarea {
+    textarea,
+    select {
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       padding: 0.55rem 0.7rem;
@@ -142,6 +164,7 @@ import { Review } from '../../core/models/review.model';
 export class BookDetailsPage {
   private readonly booksApi = inject(BooksApiService);
   private readonly reviewsApi = inject(ReviewsApiService);
+  private readonly readingStatusApi = inject(ReadingStatusApiService);
   readonly authSession = inject(AuthSessionService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
@@ -151,11 +174,18 @@ export class BookDetailsPage {
   readonly reviews = signal<Review[]>([]);
   readonly isLoadingReviews = signal(false);
   readonly isSubmittingReview = signal(false);
+  readonly isSavingReadingStatus = signal(false);
+  readonly currentReadingStatusUpdatedAt = signal<string | null>(null);
+  readonly readingStatusType = ReadingStatusType;
 
   readonly reviewForm = this.formBuilder.nonNullable.group({
     rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
     content: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(5000)]],
     containsSpoiler: [false]
+  });
+
+  readonly readingStatusForm = this.formBuilder.nonNullable.group({
+    status: [ReadingStatusType.WantToRead, [Validators.required]]
   });
 
   constructor() {
@@ -166,6 +196,9 @@ export class BookDetailsPage {
 
     this.loadBook(bookId);
     this.loadReviews(bookId);
+    if (this.authSession.isAuthenticated()) {
+      this.loadReadingStatus(bookId);
+    }
   }
 
   private loadBook(bookId: string): void {
@@ -183,6 +216,21 @@ export class BookDetailsPage {
       .subscribe({
         next: (items) => this.reviews.set(items)
       });
+  }
+
+  private loadReadingStatus(bookId: string): void {
+    this.readingStatusApi.getByBook(bookId).subscribe({
+      next: (status) => {
+        if (!status) {
+          this.currentReadingStatusUpdatedAt.set(null);
+          this.readingStatusForm.patchValue({ status: ReadingStatusType.WantToRead });
+          return;
+        }
+
+        this.currentReadingStatusUpdatedAt.set(new Date(status.updatedAt).toLocaleString());
+        this.readingStatusForm.patchValue({ status: status.status });
+      }
+    });
   }
 
   createReview(): void {
@@ -207,6 +255,26 @@ export class BookDetailsPage {
           });
           this.loadBook(bookId);
           this.loadReviews(bookId);
+        }
+      });
+  }
+
+  saveReadingStatus(): void {
+    const bookId = this.route.snapshot.paramMap.get('id');
+    if (!bookId || this.isSavingReadingStatus()) {
+      return;
+    }
+
+    this.httpErrorService.clear();
+    const raw = this.readingStatusForm.getRawValue();
+
+    this.isSavingReadingStatus.set(true);
+    this.readingStatusApi
+      .upsert(bookId, { status: raw.status })
+      .pipe(finalize(() => this.isSavingReadingStatus.set(false)))
+      .subscribe({
+        next: (result) => {
+          this.currentReadingStatusUpdatedAt.set(new Date(result.updatedAt).toLocaleString());
         }
       });
   }

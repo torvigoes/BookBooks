@@ -6,6 +6,7 @@ import { BookDetailsPage } from './features/books/book-details.page';
 import { BooksPage } from './features/books/books.page';
 import { FollowsPage } from './features/follows/follows.page';
 import { HomePage } from './features/home/home.page';
+import { ListDetailsPage } from './features/lists/list-details.page';
 import { ListsPage } from './features/lists/lists.page';
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'books', component: BooksPage },
   { path: 'books/:id', component: BookDetailsPage },
   { path: 'lists', component: ListsPage, canActivate: [authGuard] },
+  { path: 'lists/:id', component: ListDetailsPage, canActivate: [authGuard] },
   { path: 'follows', component: FollowsPage, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

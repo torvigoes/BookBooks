@@ -78,8 +78,8 @@ Done when:
 - [x] Auth migrated
 - [x] Books migrated
 - [x] Reviews migrated
-- [ ] Reading status migrated
-- [ ] Lists migrated
+- [x] Reading status migrated
+- [x] Lists migrated
 - [ ] Follows migrated
 - [ ] Feed implemented
 - [ ] Blazor retired
