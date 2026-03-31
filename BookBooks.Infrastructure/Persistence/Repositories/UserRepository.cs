@@ -23,6 +23,17 @@ public class UserRepository : IUserRepository
         return _context.Users.FirstOrDefaultAsync(u => u.UserName == username, cancellationToken);
     }
 
+    public async Task<IReadOnlyCollection<UserFollow>> GetFollowedByUserAsync(string followerId, CancellationToken cancellationToken = default)
+    {
+        var follows = await _context.UserFollows
+            .Include(f => f.Followed)
+            .Where(f => f.FollowerId == followerId)
+            .OrderByDescending(f => f.FollowedAt)
+            .ToListAsync(cancellationToken);
+
+        return follows.AsReadOnly();
+    }
+
     public Task<UserFollow?> GetFollowAsync(string followerId, string followedId, CancellationToken cancellationToken = default)
     {
         return _context.UserFollows

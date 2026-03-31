@@ -11,12 +11,14 @@ Implemented:
 - Reviews (`create`, `update`, `delete`, `toggle like`, `list by book`)
 - Reading status (`get/upsert by book for authenticated user`)
 - Lists (`create`, `get mine`, `get by id`, `add/remove book`, `delete`)
+- Follows (`follow user`, `unfollow user`, `get my following`)
 - Blazor Web flow:
   - login/register
   - books search/create/detail
   - reviews flow
   - reading status flow
   - lists flow
+  - follows flow
 - Automated tests:
   - Domain unit tests
   - Application unit tests
@@ -24,7 +26,7 @@ Implemented:
 
 Still pending:
 
-- Follow/feed module
+- Feed timeline module
 - Notifications
 - Reading analytics dashboard
 - External metadata sync strategy (Open Library)
@@ -108,6 +110,9 @@ Notes:
 - `POST /api/lists/{listId}/books` (auth)
 - `DELETE /api/lists/{listId}/books/{bookId}` (auth)
 - `DELETE /api/lists/{listId}` (auth)
+- `GET /api/follows/me` (auth)
+- `POST /api/follows/{followedUserId}` (auth)
+- `DELETE /api/follows/{followedUserId}` (auth)
 
 Swagger is available in development mode.
 
@@ -120,7 +125,7 @@ Priority 1:
 
 Priority 2:
 
-- Follow/feed feature (commands, queries, endpoints, Web UI)
+- Feed feature (commands, queries, endpoints, Web UI)
 - Lists enhancements (ordering, editing metadata, pagination)
 
 Priority 3:

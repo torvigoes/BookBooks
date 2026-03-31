@@ -28,6 +28,7 @@ builder.Services.AddScoped<BooksApiClient>();
 builder.Services.AddScoped<ListsApiClient>();
 builder.Services.AddScoped<ReviewsApiClient>();
 builder.Services.AddScoped<ReadingStatusApiClient>();
+builder.Services.AddScoped<FollowsApiClient>();
 builder.Services.AddScoped<ApiHealthService>();
 
 var host = builder.Build();

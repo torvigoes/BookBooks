@@ -6,6 +6,7 @@ public interface IUserRepository
 {
     Task<AppUser?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
     Task<AppUser?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default);
+    Task<IReadOnlyCollection<UserFollow>> GetFollowedByUserAsync(string followerId, CancellationToken cancellationToken = default);
 
     // Follows
     Task<UserFollow?> GetFollowAsync(string followerId, string followedId, CancellationToken cancellationToken = default);

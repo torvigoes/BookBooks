@@ -1,0 +1,174 @@
+@page "/follows"
+@using System.ComponentModel.DataAnnotations
+@inject FollowsApiClient FollowsApiClient
+@inject AuthSession AuthSession
+@inject NavigationManager NavigationManager
+
+<PageTitle>Seguindo</PageTitle>
+
+<h1>Seguindo</h1>
+
+@if (!AuthSession.IsAuthenticated)
+{
+    <p>Voce precisa estar autenticado para gerenciar follows. <a href="/login">Ir para login</a>.</p>
+}
+else
+{
+    <section class="mb-4">
+        <h2>Seguir usuario por ID</h2>
+        <EditForm Model="_followModel" OnValidSubmit="FollowAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label class="form-label" for="followed-user-id">User ID</label>
+                <InputText id="followed-user-id" class="form-control" @bind-Value="_followModel.FollowedUserId" />
+            </div>
+
+            <button class="btn btn-primary" disabled="@_isSubmitting" type="submit">
+                @(_isSubmitting ? "Seguindo..." : "Seguir")
+            </button>
+        </EditForm>
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(_error))
+    {
+        <StatusFeedback ErrorMessage="@_error" />
+    }
+
+    <section>
+        <h2>Usuarios que voce segue</h2>
+        @if (_isLoading)
+        {
+            <StatusFeedback IsLoading="true" LoadingMessage="Carregando follows..." />
+        }
+        else if (_following.Count == 0)
+        {
+            <p>Voce ainda nao segue ninguem.</p>
+        }
+        else
+        {
+            @foreach (var followed in _following)
+            {
+                <article class="p-3 border rounded mb-2">
+                    <p class="mb-1">
+                        <strong>@(string.IsNullOrWhiteSpace(followed.Username) ? followed.UserId : followed.Username)</strong>
+                    </p>
+                    <p class="mb-2 text-muted">User ID: @followed.UserId</p>
+                    <p class="mb-2 text-muted">Seguindo desde @followed.FollowedAt.ToLocalTime().ToString("g")</p>
+                    <button class="btn btn-sm btn-outline-danger" disabled="@_isSubmitting" @onclick="() => UnfollowAsync(followed.UserId)">
+                        Deixar de seguir
+                    </button>
+                </article>
+            }
+        }
+    </section>
+}
+
+@code {
+    private readonly FollowFormModel _followModel = new();
+    private readonly List<FollowedUserDto> _following = [];
+    private bool _isLoading = true;
+    private bool _isSubmitting;
+    private string? _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthSession.IsAuthenticated)
+        {
+            _isLoading = false;
+            return;
+        }
+
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        _isLoading = true;
+        _error = null;
+
+        try
+        {
+            var items = await FollowsApiClient.GetMineAsync();
+            _following.Clear();
+            _following.AddRange(items);
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode == 401)
+            {
+                await AuthSession.SignOutAsync();
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task FollowAsync()
+    {
+        _error = null;
+        _isSubmitting = true;
+
+        try
+        {
+            await FollowsApiClient.FollowAsync(_followModel.FollowedUserId);
+            _followModel.FollowedUserId = string.Empty;
+            await LoadAsync();
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode == 401)
+            {
+                await AuthSession.SignOutAsync();
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private async Task UnfollowAsync(string followedUserId)
+    {
+        _error = null;
+        _isSubmitting = true;
+
+        try
+        {
+            await FollowsApiClient.UnfollowAsync(followedUserId);
+            await LoadAsync();
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode == 401)
+            {
+                await AuthSession.SignOutAsync();
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private sealed class FollowFormModel
+    {
+        [Required]
+        public string FollowedUserId { get; set; } = string.Empty;
+    }
+}
