@@ -97,6 +97,28 @@ public class ReviewsController : ControllerBase
         return NoContent();
     }
 
+    [HttpPost("reviews/{reviewId}/like")]
+    [Authorize]
+    public async Task<IActionResult> ToggleLikeReview(string reviewId)
+    {
+        var userId = GetCurrentUserId();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized(new { Error = "User claim not found." });
+        }
+
+        var command = new ToggleReviewLikeCommand(reviewId, userId);
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new { Error = result.Error });
+        }
+
+        return Ok(result.Value);
+    }
+
     [HttpGet("books/{bookId}/reviews")]
     [AllowAnonymous]
     public async Task<IActionResult> GetReviewsByBook(string bookId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)

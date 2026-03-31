@@ -63,6 +63,27 @@ public class ReviewRepository : IReviewRepository
         return (averageRating, reviewCount);
     }
 
+    public Task<ReviewLike?> GetReviewLikeAsync(string reviewId, string userId, CancellationToken cancellationToken = default)
+    {
+        return _context.ReviewLikes
+            .FirstOrDefaultAsync(x => x.ReviewId == reviewId && x.UserId == userId, cancellationToken);
+    }
+
+    public Task<int> GetReviewLikesCountAsync(string reviewId, CancellationToken cancellationToken = default)
+    {
+        return _context.ReviewLikes.CountAsync(x => x.ReviewId == reviewId, cancellationToken);
+    }
+
+    public async Task AddLikeAsync(ReviewLike reviewLike, CancellationToken cancellationToken = default)
+    {
+        await _context.ReviewLikes.AddAsync(reviewLike, cancellationToken);
+    }
+
+    public void RemoveLike(ReviewLike reviewLike)
+    {
+        _context.ReviewLikes.Remove(reviewLike);
+    }
+
     public async Task AddAsync(Review review, CancellationToken cancellationToken = default)
     {
         await _context.Reviews.AddAsync(review, cancellationToken);
