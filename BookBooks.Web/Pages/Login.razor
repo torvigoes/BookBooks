@@ -63,6 +63,10 @@
         {
             _error = ex.Message;
         }
+        catch (HttpRequestException)
+        {
+            _error = "Nao foi possivel conectar com a API. Verifique se o BookBooks.API esta em execucao.";
+        }
         finally
         {
             _isSubmitting = false;

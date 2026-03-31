@@ -3,6 +3,15 @@ using BookBooks.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment() &&
+    string.IsNullOrWhiteSpace(builder.Configuration["JwtOptions:SecretKey"]))
+{
+    builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+    {
+        ["JwtOptions:SecretKey"] = "BookBooks-Dev-Only-Local-Secret-Key-Change-Me-123!"
+    });
+}
+
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -43,7 +52,12 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Web", policy =>
-        policy.WithOrigins("https://localhost:5001", "http://localhost:5000", "http://localhost:4200") // Adjust for Blazor/Angular
+        policy.WithOrigins(
+                "https://localhost:7197",
+                "http://localhost:5240",
+                "https://localhost:5001",
+                "http://localhost:5000",
+                "http://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials());
