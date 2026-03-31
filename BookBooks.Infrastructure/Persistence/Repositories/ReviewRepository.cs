@@ -49,6 +49,20 @@ public class ReviewRepository : IReviewRepository
             .FirstOrDefaultAsync(r => r.UserId == userId && r.BookId == bookId, cancellationToken);
     }
 
+    public async Task<(double AverageRating, int ReviewCount)> GetBookRatingStatsAsync(string bookId, CancellationToken cancellationToken = default)
+    {
+        var query = _context.Reviews.Where(r => r.BookId == bookId);
+        var reviewCount = await query.CountAsync(cancellationToken);
+
+        if (reviewCount == 0)
+        {
+            return (0, 0);
+        }
+
+        var averageRating = await query.AverageAsync(r => (double)r.Rating, cancellationToken);
+        return (averageRating, reviewCount);
+    }
+
     public async Task AddAsync(Review review, CancellationToken cancellationToken = default)
     {
         await _context.Reviews.AddAsync(review, cancellationToken);
