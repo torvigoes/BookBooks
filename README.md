@@ -4,7 +4,7 @@ BookBooks is a social reading platform inspired by Letterboxd, built with .NET 9
 
 ## Current State (March 31, 2026)
 
-Implemented:
+Implemented backend/API:
 
 - JWT auth (`register`, `login`)
 - Books (`create`, `get by id`, `search`)
@@ -12,46 +12,36 @@ Implemented:
 - Reading status (`get/upsert by book for authenticated user`)
 - Lists (`create`, `get mine`, `get by id`, `add/remove book`, `delete`)
 - Follows (`follow user`, `unfollow user`, `get my following`)
-- Blazor Web flow:
-  - login/register
-  - books search/create/detail
-  - reviews flow
-  - reading status flow
-  - lists flow
-  - follows flow
-- Automated tests:
-  - Domain unit tests
-  - Application unit tests
-  - API integration tests (auth guards/smoke)
 
-Still pending:
+Frontend:
 
-- Feed timeline module
-- Notifications
-- Reading analytics dashboard
-- External metadata sync strategy (Open Library)
+- `BookBooks.Web` (Blazor WebAssembly) is still available as legacy UI
+- Angular migration is now the official direction for next steps
+- New Angular app target folder: `bookbooks-web/` (repo root, outside `.sln`)
 
 ## Tech Stack
 
 - .NET 9
 - ASP.NET Core Web API
-- Blazor WebAssembly
-- Entity Framework Core (SQL Server)
+- Entity Framework Core 9 (SQL Server)
 - ASP.NET Identity + JWT
 - MediatR + FluentValidation
+- Frontend migration target: Angular (standalone components + signals)
 
 ## Solution Structure
 
 ```text
 BookBooks.sln
-|- BookBooks.Domain          # Entities, enums, interfaces, Result
-|- BookBooks.Application     # Commands/queries (CQRS), validators, handlers
-|- BookBooks.Infrastructure  # EF Core, repositories, JWT provider
-|- BookBooks.API             # Controllers, DI, Swagger
-|- BookBooks.Web             # Blazor WebAssembly client
+|- BookBooks.Domain
+|- BookBooks.Application
+|- BookBooks.Infrastructure
+|- BookBooks.API
+|- BookBooks.Web                 # legacy Blazor app during migration
 |- BookBooks.Domain.Tests
 |- BookBooks.Application.Tests
 `- BookBooks.API.IntegrationTests
+
+bookbooks-web/                   # new Angular app (to be created)
 ```
 
 ## Run Locally
@@ -60,8 +50,9 @@ Prerequisites:
 
 - .NET 9 SDK
 - SQL Server or LocalDB
+- Node.js LTS + Angular CLI (for migration phase)
 
-1. Configure local JWT secret (required in non-test runtime):
+1. Configure local JWT secret:
 
 ```bash
 dotnet user-secrets --project BookBooks.API set "JwtOptions:SecretKey" "your-strong-local-secret"
@@ -79,16 +70,31 @@ dotnet ef database update --project BookBooks.Infrastructure --startup-project B
 dotnet run --project BookBooks.API --launch-profile https
 ```
 
-4. Run Web:
+4. Legacy UI (optional while migrating):
 
 ```bash
 dotnet run --project BookBooks.Web
 ```
 
+5. Bootstrap Angular app (first time only):
+
+```bash
+ng new bookbooks-web --routing --style=scss --standalone
+```
+
+6. Run Angular app:
+
+```bash
+cd bookbooks-web
+npm install
+ng serve
+```
+
 Notes:
 
-- If port `5247` is already in use, stop old API process instances before rerunning.
-- Web chooses API base URL automatically based on HTTP/HTTPS host profile.
+- API development ports: `https://localhost:7007` and `http://localhost:5247`
+- CORS in API already allows `http://localhost:4200`
+- Add `https://localhost:4200` when Angular is served with SSL
 
 ## API Quick Reference
 
@@ -114,22 +120,11 @@ Notes:
 - `POST /api/follows/{followedUserId}` (auth)
 - `DELETE /api/follows/{followedUserId}` (auth)
 
-Swagger is available in development mode.
+## Migration Priorities (Frontend)
 
-## Development Backlog
-
-Priority 1:
-
-- Expand tests for new slices (`Lists`, `ReadingStatus`, `SearchBooks`) with deeper scenarios
-- Improve UI feedback/observability (API online status, loading/error consistency)
-
-Priority 2:
-
-- Feed feature (commands, queries, endpoints, Web UI)
-- Lists enhancements (ordering, editing metadata, pagination)
-
-Priority 3:
-
-- Notifications
-- Reading analytics dashboard
-- Open Library integration pipeline
+1. Scaffold Angular app and core setup (routing, auth interceptor, API base config)
+2. Migrate auth flow (`login`, `register`)
+3. Migrate books and book details (search/create/detail + reviews)
+4. Migrate reading status and lists
+5. Migrate follows and then feed timeline
+6. Retire Blazor screens only after feature parity and validation

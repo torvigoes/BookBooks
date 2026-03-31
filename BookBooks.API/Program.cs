@@ -55,6 +55,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
                 "https://localhost:7197",
                 "http://localhost:5240",
+                "https://localhost:4200",
                 "https://localhost:5001",
                 "http://localhost:5000",
                 "http://localhost:4200")
