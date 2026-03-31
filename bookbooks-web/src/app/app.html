@@ -1,0 +1,29 @@
+<div class="layout">
+  <header class="topbar">
+    <a class="brand" routerLink="/">BookBooks</a>
+
+    <nav class="menu">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/books" routerLinkActive="active">Books</a>
+      <a routerLink="/lists" routerLinkActive="active">Lists</a>
+      <a routerLink="/follows" routerLinkActive="active">Follows</a>
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/register" routerLinkActive="active">Register</a>
+    </nav>
+
+    @if (authSession.isAuthenticated()) {
+      <button type="button" class="btn-link" (click)="signOut()">Sign out</button>
+    }
+  </header>
+
+  @if (httpErrorService.message(); as errorMessage) {
+    <section class="global-error" role="alert">
+      <span>{{ errorMessage }}</span>
+      <button type="button" (click)="clearHttpError()">Dismiss</button>
+    </section>
+  }
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>
