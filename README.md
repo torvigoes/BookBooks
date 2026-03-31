@@ -1,4 +1,4 @@
-# 📚 Bookboxd
+# 📚 BookBooks
 
 ![.NET 9](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat&logo=dotnet)
 ![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WebAssembly-5C2D91?style=flat&logo=blazor)
@@ -48,11 +48,11 @@ API ─────────▶ Application ─────────▶ Do
 
 ### 📦 Projects
 
-  * **`Bookboxd.Domain`**: Core business rules, entities, and value objects.
-  * **`Bookboxd.Application`**: Use cases (CQRS), DTOs, validations, and interfaces.
-  * **`Bookboxd.Infrastructure`**: Database (EF Core), external services, and implementations.
-  * **`Bookboxd.API`**: Controllers, middleware, and dependency injection.
-  * **`Bookboxd.Web`**: Blazor WebAssembly client.
+  * **`BookBooks.Domain`**: Core business rules, entities, and value objects.
+  * **`BookBooks.Application`**: Use cases (CQRS), DTOs, validations, and interfaces.
+  * **`BookBooks.Infrastructure`**: Database (EF Core), external services, and implementations.
+  * **`BookBooks.API`**: Controllers, middleware, and dependency injection.
+  * **`BookBooks.Web`**: Blazor WebAssembly client.
 
 -----
 
@@ -74,31 +74,31 @@ cd BookBooks
 ```
 
 **2. Configure Database**
-Edit `Bookboxd.API/appsettings.Development.json` to include your connection string:
+Edit `BookBooks.API/appsettings.Development.json` to include your connection string:
 
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=localhost;Database=Bookboxd;Trusted_Connection=True;TrustServerCertificate=True;"
+  "DefaultConnection": "Server=localhost;Database=BookBooks;Trusted_Connection=True;TrustServerCertificate=True;"
 }
 ```
 
 **3. Apply Migrations**
 
 ```bash
-dotnet ef database update --project Bookboxd.Infrastructure --startup-project Bookboxd.API
+dotnet ef database update --project BookBooks.Infrastructure --startup-project BookBooks.API
 ```
 
 **4. Run the API**
 
 ```bash
-cd Bookboxd.API
+cd BookBooks.API
 dotnet run
 ```
 
 **5. Run the Web App**
 
 ```bash
-cd ../Bookboxd.Web
+cd ../BookBooks.Web
 dotnet run
 ```
 
@@ -114,7 +114,7 @@ dotnet run
 
 ## 🤝 Contributing
 
-Contributions are welcome\! If you'd like to help improve Bookboxd:
+Contributions are welcome\! If you'd like to help improve BookBooks:
 
 ```bash
 git checkout -b feature/your-feature
