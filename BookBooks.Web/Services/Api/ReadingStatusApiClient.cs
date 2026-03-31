@@ -14,7 +14,9 @@ public sealed class ReadingStatusApiClient : ApiClientBase
 
     public async Task<ReadingStatusDto> GetByBookAsync(string bookId, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"/api/books/{bookId}/reading-status", cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.GetAsync($"/api/books/{bookId}/reading-status", cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<ReadingStatusDto>(cancellationToken))
@@ -26,7 +28,9 @@ public sealed class ReadingStatusApiClient : ApiClientBase
         UpdateReadingStatusRequest request,
         CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PutAsJsonAsync($"/api/books/{bookId}/reading-status", request, cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.PutAsJsonAsync($"/api/books/{bookId}/reading-status", request, cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<ReadingStatusDto>(cancellationToken))

@@ -14,7 +14,9 @@ public sealed class BooksApiClient : ApiClientBase
 
     public async Task<BookDto> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"/api/books/{id}", cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.GetAsync($"/api/books/{id}", cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<BookDto>(cancellationToken))
@@ -28,8 +30,10 @@ public sealed class BooksApiClient : ApiClientBase
         CancellationToken cancellationToken = default)
     {
         var encodedSearchTerm = Uri.EscapeDataString(searchTerm ?? string.Empty);
-        var response = await _httpClient.GetAsync(
-            $"/api/books?searchTerm={encodedSearchTerm}&page={page}&pageSize={pageSize}",
+        var response = await SendRequestAsync(
+            () => _httpClient.GetAsync(
+                $"/api/books?searchTerm={encodedSearchTerm}&page={page}&pageSize={pageSize}",
+                cancellationToken),
             cancellationToken);
 
         await EnsureSuccessAsync(response);
@@ -40,7 +44,9 @@ public sealed class BooksApiClient : ApiClientBase
 
     public async Task<string> CreateAsync(CreateBookRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync("/api/books", request, cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.PostAsJsonAsync("/api/books", request, cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<string>(cancellationToken))

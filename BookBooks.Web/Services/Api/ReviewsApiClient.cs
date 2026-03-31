@@ -18,8 +18,10 @@ public sealed class ReviewsApiClient : ApiClientBase
         int pageSize = 20,
         CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync(
-            $"/api/books/{bookId}/reviews?page={page}&pageSize={pageSize}",
+        var response = await SendRequestAsync(
+            () => _httpClient.GetAsync(
+                $"/api/books/{bookId}/reviews?page={page}&pageSize={pageSize}",
+                cancellationToken),
             cancellationToken);
 
         await EnsureSuccessAsync(response);
@@ -33,7 +35,9 @@ public sealed class ReviewsApiClient : ApiClientBase
         CreateReviewRequest request,
         CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync($"/api/books/{bookId}/reviews", request, cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.PostAsJsonAsync($"/api/books/{bookId}/reviews", request, cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
     }
 }

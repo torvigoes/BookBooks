@@ -14,7 +14,9 @@ public sealed class AuthApiClient : ApiClientBase
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync("/api/auth/login", request, cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.PostAsJsonAsync("/api/auth/login", request, cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken))
@@ -23,7 +25,9 @@ public sealed class AuthApiClient : ApiClientBase
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request, cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.PostAsJsonAsync("/api/auth/register", request, cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken))

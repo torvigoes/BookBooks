@@ -14,7 +14,9 @@ public sealed class ListsApiClient : ApiClientBase
 
     public async Task<IReadOnlyCollection<BookListDto>> GetMineAsync(CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync("/api/lists", cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.GetAsync("/api/lists", cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<IReadOnlyCollection<BookListDto>>(cancellationToken))
@@ -23,7 +25,9 @@ public sealed class ListsApiClient : ApiClientBase
 
     public async Task<BookListDto> GetByIdAsync(string listId, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"/api/lists/{listId}", cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.GetAsync($"/api/lists/{listId}", cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<BookListDto>(cancellationToken))
@@ -32,7 +36,9 @@ public sealed class ListsApiClient : ApiClientBase
 
     public async Task<BookListDto> CreateAsync(CreateListRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync("/api/lists", request, cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.PostAsJsonAsync("/api/lists", request, cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<BookListDto>(cancellationToken))
@@ -44,7 +50,9 @@ public sealed class ListsApiClient : ApiClientBase
         AddBookToListRequest request,
         CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync($"/api/lists/{listId}/books", request, cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.PostAsJsonAsync($"/api/lists/{listId}/books", request, cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<BookListDto>(cancellationToken))
@@ -53,7 +61,9 @@ public sealed class ListsApiClient : ApiClientBase
 
     public async Task<BookListDto> RemoveBookAsync(string listId, string bookId, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.DeleteAsync($"/api/lists/{listId}/books/{bookId}", cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.DeleteAsync($"/api/lists/{listId}/books/{bookId}", cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<BookListDto>(cancellationToken))
@@ -62,7 +72,9 @@ public sealed class ListsApiClient : ApiClientBase
 
     public async Task DeleteAsync(string listId, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.DeleteAsync($"/api/lists/{listId}", cancellationToken);
+        var response = await SendRequestAsync(
+            () => _httpClient.DeleteAsync($"/api/lists/{listId}", cancellationToken),
+            cancellationToken);
         await EnsureSuccessAsync(response);
     }
 }
