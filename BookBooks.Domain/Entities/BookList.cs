@@ -19,7 +19,15 @@ public class BookList
     public IReadOnlyCollection<BookListItem> Items => _items.AsReadOnly();
     private readonly List<BookListItem> _items = new();
 
-    protected BookList() { }
+    /// <summary>
+    /// Protected constructor for EF Core use only.
+    /// Properties will be hydrated via column mapping.
+    /// </summary>
+    protected BookList()
+    {
+        UserId = null!;
+        Name = null!;
+    }
 
     public BookList(string userId, string name, string? description, ListVisibility visibility)
     {

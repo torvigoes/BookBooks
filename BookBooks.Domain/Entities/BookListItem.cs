@@ -13,7 +13,15 @@ public class BookListItem
     public BookList? BookList { get; private set; }
     public Book? Book { get; private set; }
 
-    protected BookListItem() { }
+    /// <summary>
+    /// Protected constructor for EF Core use only.
+    /// Properties will be hydrated via column mapping.
+    /// </summary>
+    protected BookListItem()
+    {
+        BookListId = null!;
+        BookId = null!;
+    }
 
     public BookListItem(string bookListId, string bookId, int order, string? notes = null)
     {

@@ -19,7 +19,16 @@ public class Book
     public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
     private readonly List<Review> _reviews = new();
 
-    protected Book() { }
+    /// <summary>
+    /// Protected constructor for EF Core use only.
+    /// Properties will be hydrated via column mapping.
+    /// </summary>
+    protected Book()
+    {
+        Title = null!;
+        Author = null!;
+        Isbn = null!;
+    }
 
     public Book(string title, string author, string isbn, int year, string? coverImageUrl = null)
     {

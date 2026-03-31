@@ -16,7 +16,15 @@ public class ReadingStatus
     public AppUser? User { get; private set; }
     public Book? Book { get; private set; }
 
-    protected ReadingStatus() { }
+    /// <summary>
+    /// Protected constructor for EF Core use only.
+    /// Properties will be hydrated via column mapping.
+    /// </summary>
+    protected ReadingStatus()
+    {
+        UserId = null!;
+        BookId = null!;
+    }
 
     public ReadingStatus(string userId, string bookId, ReadingStatusType status)
     {

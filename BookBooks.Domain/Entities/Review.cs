@@ -16,7 +16,16 @@ public class Review
     public Book? Book { get; private set; }
     public AppUser? User { get; private set; }
 
-    protected Review() { }
+    /// <summary>
+    /// Protected constructor for EF Core use only.
+    /// Properties will be hydrated via column mapping.
+    /// </summary>
+    protected Review()
+    {
+        BookId = null!;
+        UserId = null!;
+        Content = null!;
+    }
 
     public Review(string bookId, string userId, int rating, string content, bool containsSpoiler)
     {

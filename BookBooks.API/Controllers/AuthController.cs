@@ -1,4 +1,5 @@
 using BookBooks.Application.Features.Auth.Commands;
+using BookBooks.API.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,25 +20,13 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterCommand command)
     {
         var result = await _mediator.Send(command);
-
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { Error = result.Error });
-        }
-
-        return Ok(result.Value);
+        return this.ToActionResult(result, Ok);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
         var result = await _mediator.Send(command);
-
-        if (!result.IsSuccess)
-        {
-            return Unauthorized(new { Error = result.Error });
-        }
-
-        return Ok(result.Value);
+        return this.ToActionResult(result, Ok);
     }
 }

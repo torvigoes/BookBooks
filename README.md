@@ -1,131 +1,108 @@
-# 📚 BookBooks
+# BookBooks
 
-![.NET 9](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat&logo=dotnet)
-![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WebAssembly-5C2D91?style=flat&logo=blazor)
-![SQL Server](https://img.shields.io/badge/SQL_Server-CC2927?style=flat&logo=microsoft-sql-server)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+BookBooks is a social reading platform inspired by Letterboxd, built with .NET 9 and Clean Architecture.
 
-> A social platform for book lovers — inspired by Letterboxd — built with **.NET 9**.
+## Current State (March 31, 2026)
 
-Track your reading, write reviews, create lists, and follow other readers in a modern social experience.
+Implemented in this repository:
 
----
+- Backend API with JWT authentication (`register`, `login`)
+- Books endpoints (`create`, `get by id`)
+- Reviews endpoints (`create`, `update`, `delete`, `toggle like`, `list by book`)
+- EF Core + SQL Server persistence with initial migration
+- Blazor WebAssembly project scaffolded in solution
 
-## 🚀 Features
+Not implemented yet in code:
 
-* **📖 Book Tracking:** Organize books into *Want to Read*, *Reading*, and *Read*.
-* **⭐ Reviews & Ratings:** Write reviews with spoiler support and rate books from 1 to 5 stars.
-* **🗂️ Custom Lists:** Create curated lists like "Best of 2024" with privacy control (Public, Private, or Friends only).
-* **🧑‍🤝‍🧑 Social Feed:** Follow users and see their activity (reviews, ratings, lists) in real-time.
-* **🔗 External Integrations:** Automatic book metadata and covers via the Open Library API.
+- Reading status flows
+- Lists management endpoints
+- Follow/feed endpoints
+- Full frontend experience (current Blazor app is still template-level)
+- Automated tests
 
----
+## Tech Stack
 
-## 🧰 Tech Stack
+- .NET 9
+- ASP.NET Core Web API
+- Blazor WebAssembly
+- Entity Framework Core (SQL Server)
+- ASP.NET Identity + JWT
+- MediatR + FluentValidation
 
-| Layer | Technology |
-| :--- | :--- |
-| **Backend** | C# / .NET 9 |
-| **API** | ASP.NET Core Web API |
-| **Frontend** | Blazor WebAssembly |
-| **Database** | SQL Server |
-| **ORM** | Entity Framework Core |
-| **Auth** | ASP.NET Identity + JWT |
-| **Architecture** | Clean Architecture + CQRS |
-
----
-
-## 🏗️ Architecture
-
-This project follows **Clean Architecture**, ensuring low coupling and clear separation of concerns:
+## Solution Structure
 
 ```text
-API ─────────▶ Application ─────────▶ Domain
- │                ▲
- │                │
- └────────▶ Infrastructure ────────┘
-````
-
-### 📦 Projects
-
-  * **`BookBooks.Domain`**: Core business rules, entities, and value objects.
-  * **`BookBooks.Application`**: Use cases (CQRS), DTOs, validations, and interfaces.
-  * **`BookBooks.Infrastructure`**: Database (EF Core), external services, and implementations.
-  * **`BookBooks.API`**: Controllers, middleware, and dependency injection.
-  * **`BookBooks.Web`**: Blazor WebAssembly client.
-
------
-
-## ⚡ Getting Started
-
-### ✅ Prerequisites
-
-  * [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-  * SQL Server (or LocalDB)
-  * Visual Studio / Rider / VS Code
-
-### ▶️ Run Locally
-
-**1. Clone the repository**
-
-```bash
-git clone [https://github.com/torvigoes/BookBooks.git](https://github.com/torvigoes/BookBooks.git)
-cd BookBooks
+BookBooks.sln
+|- BookBooks.Domain          # Entities, enums, interfaces, Result
+|- BookBooks.Application     # Commands/queries (CQRS), validators, handlers
+|- BookBooks.Infrastructure  # EF Core, repositories, JWT provider
+|- BookBooks.API             # Controllers, DI, Swagger
+`- BookBooks.Web             # Blazor WebAssembly client (in progress)
 ```
 
-**2. Configure Database**
-Edit `BookBooks.API/appsettings.Development.json` to include your connection string:
+## Run Locally
 
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=localhost;Database=BookBooks;Trusted_Connection=True;TrustServerCertificate=True;"
-}
-```
+Prerequisites:
 
-**3. Apply Migrations**
+- .NET 9 SDK
+- SQL Server or LocalDB
+
+1. Configure connection string and JWT values.
+
+`BookBooks.API/appsettings.json` already contains local defaults. For development, prefer overriding via:
+
+- `BookBooks.API/appsettings.Development.json`
+- `dotnet user-secrets`
+- environment variables
+
+2. Apply migrations:
 
 ```bash
 dotnet ef database update --project BookBooks.Infrastructure --startup-project BookBooks.API
 ```
 
-**4. Run the API**
+3. Run API:
 
 ```bash
-cd BookBooks.API
-dotnet run
+dotnet run --project BookBooks.API
 ```
 
-**5. Run the Web App**
+4. Run Web:
 
 ```bash
-cd ../BookBooks.Web
-dotnet run
+dotnet run --project BookBooks.Web
 ```
 
------
+## API Quick Reference
 
-## 🧪 Future Improvements
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/books`
+- `GET /api/books/{id}`
+- `POST /api/books/{bookId}/reviews` (auth)
+- `PUT /api/reviews/{reviewId}` (auth)
+- `DELETE /api/reviews/{reviewId}` (auth)
+- `POST /api/reviews/{reviewId}/like` (auth)
+- `GET /api/books/{bookId}/reviews`
 
-  * 🧠 AI-powered recommendations
-  * 📊 Reading statistics dashboard
-  * 🔔 Notifications system
+Swagger is available in development mode.
 
------
+## Development Backlog
 
-## 🤝 Contributing
+Priority 1:
 
-Contributions are welcome\! If you'd like to help improve BookBooks:
+- Add automated tests (Domain, Application, API integration)
+- Deliver first real Blazor flow (auth + books + reviews)
+- Move JWT secret out of tracked config for non-local environments
 
-```bash
-git checkout -b feature/your-feature
-git commit -m "feat: add new feature"
-git push origin feature/your-feature
-```
+Priority 2:
 
-Then open a Pull Request 🚀
+- Lists feature (commands, queries, endpoints, UI)
+- Reading status feature (upsert + retrieval + UI)
+- Follow/feed feature
 
------
+Priority 3:
 
-## 📄 License
-
-This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
+- Notifications
+- Reading analytics dashboard
+- External book metadata sync strategy

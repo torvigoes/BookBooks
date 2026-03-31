@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using BookBooks.API.Common;
 using BookBooks.Application.Features.Reviews.Commands;
 using BookBooks.Application.Features.Reviews.DTOs;
 using BookBooks.Application.Features.Reviews.Queries;
@@ -27,7 +28,7 @@ public class ReviewsController : ControllerBase
 
         if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized(new { Error = "User claim not found." });
+            return this.ToFailureActionResult("User claim not found.");
         }
 
         var command = new CreateReviewCommand(
@@ -39,12 +40,9 @@ public class ReviewsController : ControllerBase
 
         var result = await _mediator.Send(command);
 
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { Error = result.Error });
-        }
-
-        return CreatedAtAction(nameof(GetReviewsByBook), new { bookId }, new { reviewId = result.Value });
+        return this.ToActionResult(
+            result,
+            reviewId => CreatedAtAction(nameof(GetReviewsByBook), new { bookId }, new { reviewId }));
     }
 
     [HttpPut("reviews/{reviewId}")]
@@ -55,7 +53,7 @@ public class ReviewsController : ControllerBase
 
         if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized(new { Error = "User claim not found." });
+            return this.ToFailureActionResult("User claim not found.");
         }
 
         var command = new UpdateReviewCommand(
@@ -67,12 +65,7 @@ public class ReviewsController : ControllerBase
 
         var result = await _mediator.Send(command);
 
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { Error = result.Error });
-        }
-
-        return NoContent();
+        return this.ToActionResult(result, NoContent);
     }
 
     [HttpDelete("reviews/{reviewId}")]
@@ -83,18 +76,13 @@ public class ReviewsController : ControllerBase
 
         if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized(new { Error = "User claim not found." });
+            return this.ToFailureActionResult("User claim not found.");
         }
 
         var command = new DeleteReviewCommand(reviewId, userId);
         var result = await _mediator.Send(command);
 
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { Error = result.Error });
-        }
-
-        return NoContent();
+        return this.ToActionResult(result, NoContent);
     }
 
     [HttpPost("reviews/{reviewId}/like")]
@@ -105,18 +93,13 @@ public class ReviewsController : ControllerBase
 
         if (string.IsNullOrWhiteSpace(userId))
         {
-            return Unauthorized(new { Error = "User claim not found." });
+            return this.ToFailureActionResult("User claim not found.");
         }
 
         var command = new ToggleReviewLikeCommand(reviewId, userId);
         var result = await _mediator.Send(command);
 
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { Error = result.Error });
-        }
-
-        return Ok(result.Value);
+        return this.ToActionResult(result, Ok);
     }
 
     [HttpGet("books/{bookId}/reviews")]
@@ -126,12 +109,7 @@ public class ReviewsController : ControllerBase
         var query = new GetReviewsByBookQuery(bookId, page, pageSize);
         var result = await _mediator.Send(query);
 
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { Error = result.Error });
-        }
-
-        return Ok(result.Value);
+        return this.ToActionResult(result, Ok);
     }
 
     private string? GetCurrentUserId()

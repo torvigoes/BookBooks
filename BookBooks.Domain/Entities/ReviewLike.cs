@@ -12,7 +12,15 @@ public class ReviewLike
     public AppUser? User { get; private set; }
     public Review? Review { get; private set; }
 
-    protected ReviewLike() { }
+    /// <summary>
+    /// Protected constructor for EF Core use only.
+    /// Properties will be hydrated via column mapping.
+    /// </summary>
+    protected ReviewLike()
+    {
+        UserId = null!;
+        ReviewId = null!;
+    }
 
     public ReviewLike(string userId, string reviewId)
     {

@@ -1,4 +1,5 @@
 using System.Reflection;
+using BookBooks.Application.Common.Behaviors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Mapster;
@@ -15,7 +16,7 @@ public static class DependencyInjection
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(assembly);
-            // Validation Pipeline behavior could be injected here
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
 
         // 2. Add FluentValidation

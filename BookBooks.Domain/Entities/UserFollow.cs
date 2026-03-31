@@ -12,7 +12,15 @@ public class UserFollow
     public AppUser? Follower { get; private set; }
     public AppUser? Followed { get; private set; }
 
-    protected UserFollow() { }
+    /// <summary>
+    /// Protected constructor for EF Core use only.
+    /// Properties will be hydrated via column mapping.
+    /// </summary>
+    protected UserFollow()
+    {
+        FollowerId = null!;
+        FollowedId = null!;
+    }
 
     public UserFollow(string followerId, string followedId)
     {
