@@ -76,8 +76,8 @@ Done when:
 
 - [x] Angular app scaffolded
 - [x] Auth migrated
-- [ ] Books migrated
-- [ ] Reviews migrated
+- [x] Books migrated
+- [x] Reviews migrated
 - [ ] Reading status migrated
 - [ ] Lists migrated
 - [ ] Follows migrated
