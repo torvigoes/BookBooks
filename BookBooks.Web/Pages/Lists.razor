@@ -1,0 +1,176 @@
+@page "/lists"
+@using System.ComponentModel.DataAnnotations
+@inject ListsApiClient ListsApiClient
+@inject AuthSession AuthSession
+@inject NavigationManager NavigationManager
+
+<PageTitle>Listas</PageTitle>
+
+<h1>Minhas Listas</h1>
+
+@if (!AuthSession.IsAuthenticated)
+{
+    <p>Voce precisa estar autenticado para gerenciar listas. <a href="/login">Ir para login</a>.</p>
+}
+else
+{
+    <section class="mb-4">
+        <h2>Criar lista</h2>
+        <EditForm Model="_createModel" OnValidSubmit="CreateAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label class="form-label" for="list-name">Nome</label>
+                <InputText id="list-name" class="form-control" @bind-Value="_createModel.Name" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="list-description">Descricao</label>
+                <InputTextArea id="list-description" class="form-control" @bind-Value="_createModel.Description" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="list-visibility">Visibilidade</label>
+                <InputSelect id="list-visibility" class="form-select" @bind-Value="_createModel.Visibility">
+                    <option value="@ListVisibility.Public">Publica</option>
+                    <option value="@ListVisibility.Private">Privada</option>
+                    <option value="@ListVisibility.FriendsOnly">Apenas amigos</option>
+                </InputSelect>
+            </div>
+
+            <button class="btn btn-primary" disabled="@_isSubmitting" type="submit">
+                @(_isSubmitting ? "Criando..." : "Criar")
+            </button>
+        </EditForm>
+
+        @if (!string.IsNullOrWhiteSpace(_error))
+        {
+            <p class="text-danger mt-3">@_error</p>
+        }
+    </section>
+
+    <section>
+        <h2>Listas existentes</h2>
+        @if (_isLoading)
+        {
+            <p>Carregando...</p>
+        }
+        else if (_lists.Count == 0)
+        {
+            <p>Nenhuma lista criada ainda.</p>
+        }
+        else
+        {
+            @foreach (var list in _lists)
+            {
+                <article class="p-3 border rounded mb-2">
+                    <p class="mb-1"><strong>@list.Name</strong> (@list.ItemCount livros)</p>
+                    <p class="mb-2">@list.Description</p>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="() => OpenList(list.Id)">
+                        Ver detalhes
+                    </button>
+                </article>
+            }
+        }
+    </section>
+}
+
+@code {
+    private readonly CreateListFormModel _createModel = new();
+    private bool _isLoading = true;
+    private bool _isSubmitting;
+    private string? _error;
+    private List<BookListDto> _lists = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthSession.IsAuthenticated)
+        {
+            _isLoading = false;
+            return;
+        }
+
+        await LoadListsAsync();
+    }
+
+    private async Task LoadListsAsync()
+    {
+        _isLoading = true;
+        _error = null;
+
+        try
+        {
+            var lists = await ListsApiClient.GetMineAsync();
+            _lists = [.. lists];
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode == 401)
+            {
+                await AuthSession.SignOutAsync();
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            _error = ex.Message;
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Nao foi possivel conectar com a API.";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task CreateAsync()
+    {
+        _error = null;
+        _isSubmitting = true;
+
+        try
+        {
+            var created = await ListsApiClient.CreateAsync(new CreateListRequest(
+                _createModel.Name,
+                _createModel.Description,
+                _createModel.Visibility));
+
+            _createModel.Name = string.Empty;
+            _createModel.Description = null;
+            _createModel.Visibility = ListVisibility.Public;
+
+            _lists.Insert(0, created);
+        }
+        catch (ApiException ex)
+        {
+            _error = ex.Message;
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Nao foi possivel conectar com a API.";
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private void OpenList(string listId)
+    {
+        NavigationManager.NavigateTo($"/lists/{listId}");
+    }
+
+    private sealed class CreateListFormModel
+    {
+        [Required]
+        [MaxLength(120)]
+        public string Name { get; set; } = string.Empty;
+
+        [MaxLength(500)]
+        public string? Description { get; set; }
+
+        public ListVisibility Visibility { get; set; } = ListVisibility.Public;
+    }
+}

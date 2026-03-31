@@ -25,6 +25,7 @@ builder.Services.AddHttpClient("Api", client =>
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Api"));
 builder.Services.AddScoped<AuthApiClient>();
 builder.Services.AddScoped<BooksApiClient>();
+builder.Services.AddScoped<ListsApiClient>();
 builder.Services.AddScoped<ReviewsApiClient>();
 builder.Services.AddScoped<ReadingStatusApiClient>();
 

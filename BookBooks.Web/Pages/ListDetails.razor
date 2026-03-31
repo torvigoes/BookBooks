@@ -1,0 +1,177 @@
+@page "/lists/{ListId}"
+@using System.ComponentModel.DataAnnotations
+@inject ListsApiClient ListsApiClient
+@inject AuthSession AuthSession
+@inject NavigationManager NavigationManager
+
+<PageTitle>Detalhe da Lista</PageTitle>
+
+@if (_isLoading)
+{
+    <p>Carregando...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <p class="text-danger">@_error</p>
+}
+else if (_list is not null)
+{
+    <h1>@_list.Name</h1>
+    <p>@_list.Description</p>
+    <p><strong>Visibilidade:</strong> @_list.Visibility</p>
+    <p><strong>Total de livros:</strong> @_list.ItemCount</p>
+
+    <section class="mt-4 mb-4">
+        <h2>Adicionar livro</h2>
+        <EditForm Model="_addBookModel" OnValidSubmit="AddBookAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label class="form-label" for="book-id">Book ID</label>
+                <InputText id="book-id" class="form-control" @bind-Value="_addBookModel.BookId" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="book-notes">Notas</label>
+                <InputTextArea id="book-notes" class="form-control" @bind-Value="_addBookModel.Notes" />
+            </div>
+
+            <button class="btn btn-primary" disabled="@_isSubmitting" type="submit">
+                @(_isSubmitting ? "Adicionando..." : "Adicionar")
+            </button>
+        </EditForm>
+    </section>
+
+    <section>
+        <h2>Livros da lista</h2>
+        @if (_list.Items.Count == 0)
+        {
+            <p>Nenhum livro adicionado ainda.</p>
+        }
+        else
+        {
+            @foreach (var item in _list.Items)
+            {
+                <article class="p-3 border rounded mb-2">
+                    <p class="mb-1"><strong>@item.BookTitle</strong> - @item.BookAuthor</p>
+                    <p class="mb-1">Ordem: @item.Order</p>
+                    @if (!string.IsNullOrWhiteSpace(item.Notes))
+                    {
+                        <p class="mb-2">@item.Notes</p>
+                    }
+                    <button class="btn btn-sm btn-outline-danger" @onclick="() => RemoveBookAsync(item.BookId)">
+                        Remover
+                    </button>
+                </article>
+            }
+        }
+    </section>
+}
+
+@code {
+    [Parameter]
+    public string ListId { get; set; } = string.Empty;
+
+    private BookListDto? _list;
+    private bool _isLoading = true;
+    private bool _isSubmitting;
+    private string? _error;
+    private readonly AddBookFormModel _addBookModel = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!AuthSession.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        _isLoading = true;
+        _error = null;
+
+        try
+        {
+            _list = await ListsApiClient.GetByIdAsync(ListId);
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode == 401)
+            {
+                await AuthSession.SignOutAsync();
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            _error = ex.Message;
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Nao foi possivel conectar com a API.";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task AddBookAsync()
+    {
+        _error = null;
+        _isSubmitting = true;
+
+        try
+        {
+            _list = await ListsApiClient.AddBookAsync(
+                ListId,
+                new AddBookToListRequest(_addBookModel.BookId, _addBookModel.Notes));
+
+            _addBookModel.BookId = string.Empty;
+            _addBookModel.Notes = null;
+        }
+        catch (ApiException ex)
+        {
+            _error = ex.Message;
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Nao foi possivel conectar com a API.";
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private async Task RemoveBookAsync(string bookId)
+    {
+        _error = null;
+
+        try
+        {
+            _list = await ListsApiClient.RemoveBookAsync(ListId, bookId);
+        }
+        catch (ApiException ex)
+        {
+            _error = ex.Message;
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Nao foi possivel conectar com a API.";
+        }
+    }
+
+    private sealed class AddBookFormModel
+    {
+        [Required]
+        public string BookId { get; set; } = string.Empty;
+
+        [MaxLength(500)]
+        public string? Notes { get; set; }
+    }
+}
