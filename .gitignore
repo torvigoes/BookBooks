@@ -61,3 +61,6 @@ dist/
 .angular/
 npm-debug.log
 yarn-error.log
+
+# Codex local workspace
+.codex/

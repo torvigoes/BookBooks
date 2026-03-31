@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BookBooks.API.IntegrationTests;
 
-public sealed class ApiSmokeTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class ApiSmokeTests : IClassFixture<TestWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestWebApplicationFactory _factory;
 
-    public ApiSmokeTests(WebApplicationFactory<Program> factory)
+    public ApiSmokeTests(TestWebApplicationFactory factory)
     {
+        Environment.SetEnvironmentVariable("JwtOptions__SecretKey", "IntegrationTestSecretKeyWithEnoughLength123!");
         _factory = factory;
     }
 

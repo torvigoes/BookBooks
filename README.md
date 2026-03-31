@@ -49,11 +49,14 @@ Prerequisites:
 
 1. Configure connection string and JWT values.
 
-`BookBooks.API/appsettings.json` already contains local defaults. For development, prefer overriding via:
+`BookBooks.API/appsettings.json` contains non-sensitive defaults only.
+Set `JwtOptions:SecretKey` locally with user-secrets or environment variable.
 
-- `BookBooks.API/appsettings.Development.json`
-- `dotnet user-secrets`
-- environment variables
+```bash
+dotnet user-secrets --project BookBooks.API set "JwtOptions:SecretKey" "your-strong-local-secret"
+```
+
+You can also override via `JwtOptions__SecretKey` environment variable.
 
 2. Apply migrations:
 

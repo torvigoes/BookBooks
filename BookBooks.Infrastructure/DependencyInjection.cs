@@ -44,8 +44,15 @@ public static class DependencyInjection
         .AddDefaultTokenProviders();
 
         // Configure JWT Authentication
-        var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
-        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+        var jwtOptionsSection = configuration.GetSection(JwtOptions.SectionName);
+        var jwtOptions = jwtOptionsSection.Get<JwtOptions>() ?? new JwtOptions();
+        services.Configure<JwtOptions>(jwtOptionsSection);
+
+        if (string.IsNullOrWhiteSpace(jwtOptions.SecretKey))
+        {
+            throw new InvalidOperationException(
+                "JWT SecretKey is missing. Configure JwtOptions:SecretKey via user-secrets or environment variable.");
+        }
 
         services.AddScoped<IJwtProvider, JwtProvider>();
 
@@ -58,10 +65,10 @@ public static class DependencyInjection
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtOptions?.Issuer,
-                    ValidAudience = jwtOptions?.Audience,
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtOptions?.SecretKey ?? throw new InvalidOperationException("JWT SecretKey is missing from configuration.")))
+                        Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
                 };
             });
 

@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>BookBooks-API-777c98e4-37cf-48f4-92be-8f2f4e8f17dd</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
