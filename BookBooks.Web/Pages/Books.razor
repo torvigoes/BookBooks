@@ -1,0 +1,34 @@
+@page "/books"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Livro</PageTitle>
+
+<h1>Abrir Livro</h1>
+<p>Informe o ID do livro para abrir detalhes e reviews.</p>
+
+<EditForm Model="_model" OnValidSubmit="OpenBook">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label" for="book-id">Book ID</label>
+        <InputText id="book-id" class="form-control" @bind-Value="_model.BookId" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Abrir</button>
+</EditForm>
+
+@code {
+    private readonly OpenBookModel _model = new();
+
+    private void OpenBook()
+    {
+        NavigationManager.NavigateTo($"/books/{_model.BookId}");
+    }
+
+    private sealed class OpenBookModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public string BookId { get; set; } = string.Empty;
+    }
+}

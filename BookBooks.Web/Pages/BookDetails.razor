@@ -1,0 +1,162 @@
+@page "/books/{BookId}"
+@using System.ComponentModel.DataAnnotations
+@inject BooksApiClient BooksApiClient
+@inject ReviewsApiClient ReviewsApiClient
+@inject AuthSession AuthSession
+
+<PageTitle>Livro</PageTitle>
+
+@if (_isLoading)
+{
+    <p>Carregando...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_loadError))
+{
+    <p class="text-danger">@_loadError</p>
+}
+else if (_book is not null)
+{
+    <h1>@_book.Title</h1>
+    <p><strong>Autor:</strong> @_book.Author</p>
+    <p><strong>Ano:</strong> @_book.Year</p>
+    <p><strong>ISBN:</strong> @_book.Isbn</p>
+    <p><strong>Nota média:</strong> @_book.AverageRating.ToString("0.00") (@_book.ReviewCount avaliações)</p>
+
+    <h2 class="mt-4">Reviews</h2>
+    @if (_reviews.Count == 0)
+    {
+        <p>Nenhuma review ainda.</p>
+    }
+    else
+    {
+        @foreach (var review in _reviews)
+        {
+            <article class="mb-3 p-3 border rounded">
+                <p><strong>@review.UserDisplayName</strong> - Nota @review.Rating/5</p>
+                <p>@review.Content</p>
+                @if (review.ContainsSpoiler)
+                {
+                    <p><em>Contém spoiler.</em></p>
+                }
+            </article>
+        }
+    }
+
+    @if (AuthSession.IsAuthenticated)
+    {
+        <h3 class="mt-4">Adicionar review</h3>
+        <EditForm Model="_createReviewModel" OnValidSubmit="CreateReviewAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label class="form-label" for="rating">Nota (1 a 5)</label>
+                <InputNumber id="rating" class="form-control" @bind-Value="_createReviewModel.Rating" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="content">Conteúdo</label>
+                <InputTextArea id="content" class="form-control" @bind-Value="_createReviewModel.Content" />
+            </div>
+
+            <div class="mb-3 form-check">
+                <InputCheckbox id="spoiler" class="form-check-input" @bind-Value="_createReviewModel.ContainsSpoiler" />
+                <label class="form-check-label" for="spoiler">Contém spoiler</label>
+            </div>
+
+            <button class="btn btn-primary" disabled="@_isSubmittingReview" type="submit">
+                @(_isSubmittingReview ? "Enviando..." : "Publicar review")
+            </button>
+        </EditForm>
+
+        @if (!string.IsNullOrWhiteSpace(_reviewError))
+        {
+            <p class="text-danger mt-3">@_reviewError</p>
+        }
+    }
+    else
+    {
+        <p class="mt-3">Entre com sua conta para publicar review.</p>
+    }
+}
+
+@code {
+    [Parameter]
+    public string BookId { get; set; } = string.Empty;
+
+    private BookDto? _book;
+    private List<ReviewDto> _reviews = [];
+    private bool _isLoading = true;
+    private bool _isSubmittingReview;
+    private string? _loadError;
+    private string? _reviewError;
+    private readonly CreateReviewFormModel _createReviewModel = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadPageAsync();
+    }
+
+    private async Task LoadPageAsync()
+    {
+        _isLoading = true;
+        _loadError = null;
+
+        try
+        {
+            _book = await BooksApiClient.GetByIdAsync(BookId);
+            var reviews = await ReviewsApiClient.GetByBookAsync(BookId);
+            _reviews = [.. reviews];
+        }
+        catch (ApiException ex)
+        {
+            _loadError = ex.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task CreateReviewAsync()
+    {
+        _reviewError = null;
+        _isSubmittingReview = true;
+
+        try
+        {
+            var request = new CreateReviewRequest(
+                _createReviewModel.Rating,
+                _createReviewModel.Content,
+                _createReviewModel.ContainsSpoiler);
+
+            await ReviewsApiClient.CreateAsync(BookId, request);
+            _createReviewModel.Content = string.Empty;
+            _createReviewModel.ContainsSpoiler = false;
+            _createReviewModel.Rating = 5;
+
+            await LoadPageAsync();
+        }
+        catch (ApiException ex)
+        {
+            _reviewError = ex.Message;
+        }
+        finally
+        {
+            _isSubmittingReview = false;
+        }
+    }
+
+    private sealed class CreateReviewFormModel
+    {
+        [Range(1, 5)]
+        public int Rating { get; set; } = 5;
+
+        [Required]
+        [MinLength(10)]
+        [MaxLength(5000)]
+        public string Content { get; set; } = string.Empty;
+
+        public bool ContainsSpoiler { get; set; }
+    }
+}

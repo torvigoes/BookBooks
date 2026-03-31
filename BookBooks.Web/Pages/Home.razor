@@ -1,7 +1,21 @@
 @page "/"
+@inject AuthSession AuthSession
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>BookBooks</h1>
 
-Welcome to your new app.
+<p>Fluxo inicial disponível: login, abrir livro por ID e publicar review.</p>
+
+@if (AuthSession.IsAuthenticated)
+{
+    <p><strong>Conectado como:</strong> @AuthSession.CurrentUser!.Username (@AuthSession.CurrentUser.Email)</p>
+}
+else
+{
+    <p>Você não está autenticado. Acesse a página de login para publicar reviews.</p>
+}
+
+<p>
+    Acesse <a href="/books">/books</a> para abrir um livro pelo ID.
+</p>
