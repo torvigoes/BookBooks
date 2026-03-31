@@ -1,0 +1,24 @@
+@if (IsLoading)
+{
+    <div class="alert alert-light border d-flex align-items-center gap-2" role="status" aria-live="polite">
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span>@LoadingMessage</span>
+    </div>
+}
+else if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    [Parameter]
+    public string LoadingMessage { get; set; } = "Carregando...";
+
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+}

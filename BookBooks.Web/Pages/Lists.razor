@@ -46,7 +46,7 @@ else
 
         @if (!string.IsNullOrWhiteSpace(_error))
         {
-            <p class="text-danger mt-3">@_error</p>
+            <div class="alert alert-danger mt-3" role="alert">@_error</div>
         }
     </section>
 
@@ -54,7 +54,11 @@ else
         <h2>Listas existentes</h2>
         @if (_isLoading)
         {
-            <p>Carregando...</p>
+            <StatusFeedback IsLoading="true" LoadingMessage="Carregando listas..." />
+        }
+        else if (!string.IsNullOrWhiteSpace(_error))
+        {
+            <StatusFeedback ErrorMessage="@_error" />
         }
         else if (_lists.Count == 0)
         {

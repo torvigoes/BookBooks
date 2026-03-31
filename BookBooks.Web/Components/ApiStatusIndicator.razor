@@ -1,0 +1,82 @@
+@implements IDisposable
+@inject ApiHealthService ApiHealthService
+
+<span class="api-status @StatusCssClass" title="@Tooltip">
+    @StatusLabel
+</span>
+
+@code {
+    private PeriodicTimer? _timer;
+    private CancellationTokenSource? _cts;
+    private ApiStatus _status = ApiStatus.Checking;
+
+    private string StatusLabel => _status switch
+    {
+        ApiStatus.Online => "API online",
+        ApiStatus.Offline => "API offline",
+        _ => "Verificando API..."
+    };
+
+    private string Tooltip => _status switch
+    {
+        ApiStatus.Online => "Conexao com a API ativa.",
+        ApiStatus.Offline => "Sem conexao com a API. Verifique se a BookBooks.API esta em execucao.",
+        _ => "Verificando conectividade com a API..."
+    };
+
+    private string StatusCssClass => _status switch
+    {
+        ApiStatus.Online => "api-status-online",
+        ApiStatus.Offline => "api-status-offline",
+        _ => "api-status-checking"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        _cts = new CancellationTokenSource();
+        _timer = new PeriodicTimer(TimeSpan.FromSeconds(20));
+
+        await RefreshStatusAsync(_cts.Token);
+        _ = RunLoopAsync();
+    }
+
+    private async Task RunLoopAsync()
+    {
+        if (_timer is null || _cts is null)
+        {
+            return;
+        }
+
+        try
+        {
+            while (await _timer.WaitForNextTickAsync(_cts.Token))
+            {
+                await RefreshStatusAsync(_cts.Token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    private async Task RefreshStatusAsync(CancellationToken cancellationToken)
+    {
+        var isOnline = await ApiHealthService.IsApiOnlineAsync(cancellationToken);
+        _status = isOnline ? ApiStatus.Online : ApiStatus.Offline;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _timer?.Dispose();
+        _cts?.Dispose();
+    }
+
+    private enum ApiStatus
+    {
+        Checking,
+        Online,
+        Offline
+    }
+}
