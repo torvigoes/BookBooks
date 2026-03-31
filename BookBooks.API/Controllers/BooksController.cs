@@ -31,4 +31,15 @@ public class BooksController : ControllerBase
         var result = await _mediator.Send(query);
         return this.ToActionResult(result, Ok);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchBooks(
+        [FromQuery] string searchTerm = "",
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20)
+    {
+        var query = new SearchBooksQuery(searchTerm, page, pageSize);
+        var result = await _mediator.Send(query);
+        return this.ToActionResult(result, Ok);
+    }
 }

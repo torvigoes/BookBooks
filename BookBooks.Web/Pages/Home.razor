@@ -5,7 +5,7 @@
 
 <h1>BookBooks</h1>
 
-<p>Fluxo inicial disponível: login, abrir livro por ID e publicar review.</p>
+<p>Fluxo inicial disponível: cadastro/login, busca/criação de livros, detalhe do livro e publicação de review.</p>
 
 @if (AuthSession.IsAuthenticated)
 {
@@ -16,6 +16,4 @@ else
     <p>Você não está autenticado. Acesse a página de login para publicar reviews.</p>
 }
 
-<p>
-    Acesse <a href="/books">/books</a> para abrir um livro pelo ID.
-</p>
+<p>Acesse <a href="/books">/books</a> para buscar, criar e abrir livros.</p>

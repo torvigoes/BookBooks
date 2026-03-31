@@ -1,17 +1,21 @@
-@page "/login"
+@page "/register"
 @using System.ComponentModel.DataAnnotations
 @inject AuthApiClient AuthApiClient
 @inject AuthSession AuthSession
 @inject NavigationManager NavigationManager
 
-<PageTitle>Login</PageTitle>
+<PageTitle>Criar Conta</PageTitle>
 
-<h1>Entrar</h1>
-<p>Ainda não tem conta? <a href="/register">Criar conta</a>.</p>
+<h1>Criar Conta</h1>
 
-<EditForm Model="_model" OnValidSubmit="HandleLoginAsync">
+<EditForm Model="_model" OnValidSubmit="HandleRegisterAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label" for="username">Usuário</label>
+        <InputText id="username" class="form-control" @bind-Value="_model.Username" />
+    </div>
 
     <div class="mb-3">
         <label class="form-label" for="email">Email</label>
@@ -34,20 +38,24 @@
 }
 
 @code {
-    private readonly LoginFormModel _model = new();
+    private readonly RegisterFormModel _model = new();
     private bool _isSubmitting;
     private string? _error;
 
-    private string _buttonLabel => _isSubmitting ? "Entrando..." : "Entrar";
+    private string _buttonLabel => _isSubmitting ? "Criando conta..." : "Criar conta";
 
-    private async Task HandleLoginAsync()
+    private async Task HandleRegisterAsync()
     {
         _error = null;
         _isSubmitting = true;
 
         try
         {
-            var response = await AuthApiClient.LoginAsync(new LoginRequest(_model.Email, _model.Password));
+            var response = await AuthApiClient.RegisterAsync(new RegisterRequest(
+                _model.Username,
+                _model.Email,
+                _model.Password));
+
             AuthSession.SignIn(response);
             NavigationManager.NavigateTo("/");
         }
@@ -61,13 +69,19 @@
         }
     }
 
-    private sealed class LoginFormModel
+    private sealed class RegisterFormModel
     {
+        [Required]
+        [MinLength(3)]
+        [MaxLength(50)]
+        public string Username { get; set; } = string.Empty;
+
         [Required]
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
         [Required]
+        [MinLength(6)]
         public string Password { get; set; } = string.Empty;
     }
 }

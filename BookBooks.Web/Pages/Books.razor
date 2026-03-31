@@ -1,34 +1,208 @@
 @page "/books"
+@using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
+@inject BooksApiClient BooksApiClient
 
-<PageTitle>Livro</PageTitle>
+<PageTitle>Livros</PageTitle>
 
-<h1>Abrir Livro</h1>
-<p>Informe o ID do livro para abrir detalhes e reviews.</p>
+<h1>Livros</h1>
 
-<EditForm Model="_model" OnValidSubmit="OpenBook">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<section class="mb-4">
+    <h2>Buscar</h2>
+    <EditForm Model="_searchModel" OnValidSubmit="SearchAsync">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <div class="mb-3">
-        <label class="form-label" for="book-id">Book ID</label>
-        <InputText id="book-id" class="form-control" @bind-Value="_model.BookId" />
-    </div>
+        <div class="mb-3">
+            <label class="form-label" for="search-term">Título ou autor</label>
+            <InputText id="search-term" class="form-control" @bind-Value="_searchModel.SearchTerm" />
+        </div>
 
-    <button class="btn btn-primary" type="submit">Abrir</button>
-</EditForm>
+        <button class="btn btn-primary" disabled="@_isSearching" type="submit">
+            @(_isSearching ? "Buscando..." : "Buscar")
+        </button>
+    </EditForm>
+
+    @if (!string.IsNullOrWhiteSpace(_searchError))
+    {
+        <p class="text-danger mt-3">@_searchError</p>
+    }
+
+    @if (_searchResults.Count > 0)
+    {
+        <div class="mt-3">
+            @foreach (var book in _searchResults)
+            {
+                <article class="p-3 border rounded mb-2">
+                    <p class="mb-1"><strong>@book.Title</strong> - @book.Author (@book.Year)</p>
+                    <p class="mb-2">ISBN: @book.Isbn</p>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="() => OpenBook(book.Id)">
+                        Ver detalhes
+                    </button>
+                </article>
+            }
+        </div>
+    }
+</section>
+
+<section class="mb-4">
+    <h2>Abrir por ID</h2>
+    <EditForm Model="_openBookModel" OnValidSubmit="OpenBookById">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label" for="book-id">Book ID</label>
+            <InputText id="book-id" class="form-control" @bind-Value="_openBookModel.BookId" />
+        </div>
+
+        <button class="btn btn-secondary" type="submit">Abrir</button>
+    </EditForm>
+</section>
+
+<section>
+    <h2>Criar livro</h2>
+    <EditForm Model="_createBookModel" OnValidSubmit="CreateBookAsync">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label" for="title">Título</label>
+            <InputText id="title" class="form-control" @bind-Value="_createBookModel.Title" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="author">Autor</label>
+            <InputText id="author" class="form-control" @bind-Value="_createBookModel.Author" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="isbn">ISBN (10-13)</label>
+            <InputText id="isbn" class="form-control" @bind-Value="_createBookModel.Isbn" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="year">Ano</label>
+            <InputNumber id="year" class="form-control" @bind-Value="_createBookModel.Year" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="cover">URL da capa (opcional)</label>
+            <InputText id="cover" class="form-control" @bind-Value="_createBookModel.CoverImageUrl" />
+        </div>
+
+        <button class="btn btn-success" disabled="@_isCreating" type="submit">
+            @(_isCreating ? "Criando..." : "Criar livro")
+        </button>
+    </EditForm>
+
+    @if (!string.IsNullOrWhiteSpace(_createError))
+    {
+        <p class="text-danger mt-3">@_createError</p>
+    }
+</section>
 
 @code {
-    private readonly OpenBookModel _model = new();
-
-    private void OpenBook()
+    private readonly SearchBooksModel _searchModel = new();
+    private readonly OpenBookModel _openBookModel = new();
+    private readonly CreateBookFormModel _createBookModel = new()
     {
-        NavigationManager.NavigateTo($"/books/{_model.BookId}");
+        Year = DateTime.UtcNow.Year
+    };
+
+    private bool _isSearching;
+    private bool _isCreating;
+    private string? _searchError;
+    private string? _createError;
+    private List<BookDto> _searchResults = [];
+
+    private async Task SearchAsync()
+    {
+        _searchError = null;
+        _isSearching = true;
+
+        try
+        {
+            var books = await BooksApiClient.SearchAsync(_searchModel.SearchTerm);
+            _searchResults = [.. books];
+        }
+        catch (ApiException ex)
+        {
+            _searchError = ex.Message;
+        }
+        finally
+        {
+            _isSearching = false;
+        }
+    }
+
+    private void OpenBookById()
+    {
+        OpenBook(_openBookModel.BookId);
+    }
+
+    private void OpenBook(string id)
+    {
+        NavigationManager.NavigateTo($"/books/{id}");
+    }
+
+    private async Task CreateBookAsync()
+    {
+        _createError = null;
+        _isCreating = true;
+
+        try
+        {
+            var createdBookId = await BooksApiClient.CreateAsync(new CreateBookRequest(
+                _createBookModel.Title,
+                _createBookModel.Author,
+                _createBookModel.Isbn,
+                _createBookModel.Year,
+                string.IsNullOrWhiteSpace(_createBookModel.CoverImageUrl)
+                    ? null
+                    : _createBookModel.CoverImageUrl));
+
+            OpenBook(createdBookId);
+        }
+        catch (ApiException ex)
+        {
+            _createError = ex.Message;
+        }
+        finally
+        {
+            _isCreating = false;
+        }
+    }
+
+    private sealed class SearchBooksModel
+    {
+        public string SearchTerm { get; set; } = string.Empty;
     }
 
     private sealed class OpenBookModel
     {
-        [System.ComponentModel.DataAnnotations.Required]
+        [Required]
         public string BookId { get; set; } = string.Empty;
+    }
+
+    private sealed class CreateBookFormModel
+    {
+        [Required]
+        [MaxLength(200)]
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
+        [MaxLength(150)]
+        public string Author { get; set; } = string.Empty;
+
+        [Required]
+        [MinLength(10)]
+        [MaxLength(13)]
+        public string Isbn { get; set; } = string.Empty;
+
+        [Range(1, 3000)]
+        public int Year { get; set; }
+
+        public string? CoverImageUrl { get; set; }
     }
 }
