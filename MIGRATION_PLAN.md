@@ -80,6 +80,6 @@ Done when:
 - [x] Reviews migrated
 - [x] Reading status migrated
 - [x] Lists migrated
-- [ ] Follows migrated
+- [x] Follows migrated
 - [ ] Feed implemented
 - [ ] Blazor retired
