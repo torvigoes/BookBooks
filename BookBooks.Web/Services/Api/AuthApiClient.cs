@@ -18,7 +18,7 @@ public sealed class AuthApiClient : ApiClientBase
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken))
-               ?? throw new ApiException("Invalid authentication response payload.");
+               ?? throw new ApiException("Invalid authentication response payload.", 500);
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
@@ -27,6 +27,6 @@ public sealed class AuthApiClient : ApiClientBase
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken))
-               ?? throw new ApiException("Invalid authentication response payload.");
+               ?? throw new ApiException("Invalid authentication response payload.", 500);
     }
 }

@@ -38,7 +38,7 @@
                 @AuthSession.CurrentUser!.Username
             </div>
             <div class="nav-item px-3">
-                <button class="btn btn-link nav-link" @onclick="SignOut">Sair</button>
+                <button class="btn btn-link nav-link" @onclick="SignOutAsync">Sair</button>
             </div>
         }
     </nav>
@@ -64,9 +64,9 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void SignOut()
+    private async Task SignOutAsync()
     {
-        AuthSession.SignOut();
+        await AuthSession.SignOutAsync();
     }
 
     public void Dispose()

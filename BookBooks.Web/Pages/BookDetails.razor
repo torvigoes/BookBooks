@@ -3,6 +3,7 @@
 @inject BooksApiClient BooksApiClient
 @inject ReviewsApiClient ReviewsApiClient
 @inject AuthSession AuthSession
+@inject NavigationManager NavigationManager
 
 <PageTitle>Livro</PageTitle>
 
@@ -76,7 +77,7 @@ else if (_book is not null)
     }
     else
     {
-        <p class="mt-3">Entre com sua conta para publicar review.</p>
+        <p class="mt-3">Entre com sua conta para publicar review. <a href="/login">Ir para login</a>.</p>
     }
 }
 
@@ -139,6 +140,14 @@ else if (_book is not null)
         }
         catch (ApiException ex)
         {
+            if (ex.StatusCode == 401)
+            {
+                await AuthSession.SignOutAsync();
+                _reviewError = "Sua sessão expirou. Faça login novamente.";
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
             _reviewError = ex.Message;
         }
         finally

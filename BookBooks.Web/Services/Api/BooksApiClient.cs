@@ -18,7 +18,7 @@ public sealed class BooksApiClient : ApiClientBase
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<BookDto>(cancellationToken))
-               ?? throw new ApiException("Invalid book response payload.");
+               ?? throw new ApiException("Invalid book response payload.", 500);
     }
 
     public async Task<IReadOnlyCollection<BookDto>> SearchAsync(
@@ -44,6 +44,6 @@ public sealed class BooksApiClient : ApiClientBase
         await EnsureSuccessAsync(response);
 
         return (await response.Content.ReadFromJsonAsync<string>(cancellationToken))
-               ?? throw new ApiException("Invalid create book response payload.");
+               ?? throw new ApiException("Invalid create book response payload.", 500);
     }
 }

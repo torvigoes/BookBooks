@@ -18,6 +18,6 @@ public abstract class ApiClientBase
             message = $"Request failed with status code {(int)response.StatusCode}.";
         }
 
-        throw new ApiException(message);
+        throw new ApiException(message, (int)response.StatusCode);
     }
 }

@@ -40,6 +40,14 @@
 
     private string _buttonLabel => _isSubmitting ? "Entrando..." : "Entrar";
 
+    protected override void OnInitialized()
+    {
+        if (AuthSession.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
     private async Task HandleLoginAsync()
     {
         _error = null;
@@ -48,7 +56,7 @@
         try
         {
             var response = await AuthApiClient.LoginAsync(new LoginRequest(_model.Email, _model.Password));
-            AuthSession.SignIn(response);
+            await AuthSession.SignInAsync(response);
             NavigationManager.NavigateTo("/");
         }
         catch (ApiException ex)

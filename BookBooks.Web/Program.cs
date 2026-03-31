@@ -24,4 +24,6 @@ builder.Services.AddScoped<AuthApiClient>();
 builder.Services.AddScoped<BooksApiClient>();
 builder.Services.AddScoped<ReviewsApiClient>();
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+await host.Services.GetRequiredService<AuthSession>().InitializeAsync();
+await host.RunAsync();
