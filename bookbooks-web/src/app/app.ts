@@ -12,6 +12,7 @@ import { AuthSessionService } from './core/auth/auth-session.service';
 export class App {
   protected readonly authSession = inject(AuthSessionService);
   protected readonly httpErrorService = inject(HttpErrorService);
+  protected readonly currentSession = this.authSession.session;
 
   protected clearHttpError(): void {
     this.httpErrorService.clear();

@@ -51,6 +51,17 @@
   padding: 0.35rem 0.65rem;
 }
 
+.session-box {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.session-box span {
+  color: #cbd5e1;
+  font-size: 0.88rem;
+}
+
 .global-error {
   align-items: center;
   background: #7f1d1d;

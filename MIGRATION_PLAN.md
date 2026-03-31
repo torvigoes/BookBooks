@@ -74,8 +74,8 @@ Done when:
 
 ## Tracking Checklist
 
-- [ ] Angular app scaffolded
-- [ ] Auth migrated
+- [x] Angular app scaffolded
+- [x] Auth migrated
 - [ ] Books migrated
 - [ ] Reviews migrated
 - [ ] Reading status migrated

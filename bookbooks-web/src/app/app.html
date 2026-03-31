@@ -7,12 +7,17 @@
       <a routerLink="/books" routerLinkActive="active">Books</a>
       <a routerLink="/lists" routerLinkActive="active">Lists</a>
       <a routerLink="/follows" routerLinkActive="active">Follows</a>
-      <a routerLink="/login" routerLinkActive="active">Login</a>
-      <a routerLink="/register" routerLinkActive="active">Register</a>
+      @if (!authSession.isAuthenticated()) {
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+      }
     </nav>
 
     @if (authSession.isAuthenticated()) {
-      <button type="button" class="btn-link" (click)="signOut()">Sign out</button>
+      <div class="session-box">
+        <span>{{ currentSession()?.username }}</span>
+        <button type="button" class="btn-link" (click)="signOut()">Sign out</button>
+      </div>
     }
   </header>
 
