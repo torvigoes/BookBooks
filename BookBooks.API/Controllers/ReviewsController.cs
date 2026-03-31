@@ -23,8 +23,7 @@ public class ReviewsController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateReview(string bookId, [FromBody] CreateReviewRequest request)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-                     ?? User.FindFirstValue("sub");
+        var userId = GetCurrentUserId();
 
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -48,6 +47,56 @@ public class ReviewsController : ControllerBase
         return CreatedAtAction(nameof(GetReviewsByBook), new { bookId }, new { reviewId = result.Value });
     }
 
+    [HttpPut("reviews/{reviewId}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateReview(string reviewId, [FromBody] UpdateReviewRequest request)
+    {
+        var userId = GetCurrentUserId();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized(new { Error = "User claim not found." });
+        }
+
+        var command = new UpdateReviewCommand(
+            reviewId,
+            userId,
+            request.Rating,
+            request.Content,
+            request.ContainsSpoiler);
+
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new { Error = result.Error });
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete("reviews/{reviewId}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteReview(string reviewId)
+    {
+        var userId = GetCurrentUserId();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized(new { Error = "User claim not found." });
+        }
+
+        var command = new DeleteReviewCommand(reviewId, userId);
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new { Error = result.Error });
+        }
+
+        return NoContent();
+    }
+
     [HttpGet("books/{bookId}/reviews")]
     [AllowAnonymous]
     public async Task<IActionResult> GetReviewsByBook(string bookId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
@@ -61,5 +110,11 @@ public class ReviewsController : ControllerBase
         }
 
         return Ok(result.Value);
+    }
+
+    private string? GetCurrentUserId()
+    {
+        return User.FindFirstValue(ClaimTypes.NameIdentifier)
+               ?? User.FindFirstValue("sub");
     }
 }
