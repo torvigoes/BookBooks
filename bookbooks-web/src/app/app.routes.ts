@@ -4,6 +4,7 @@ import { LoginPage } from './features/auth/login/login.page';
 import { RegisterPage } from './features/auth/register/register.page';
 import { BookDetailsPage } from './features/books/book-details.page';
 import { BooksPage } from './features/books/books.page';
+import { FeedPage } from './features/feed/feed.page';
 import { FollowsPage } from './features/follows/follows.page';
 import { HomePage } from './features/home/home.page';
 import { ListDetailsPage } from './features/lists/list-details.page';
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterPage },
   { path: 'books', component: BooksPage },
   { path: 'books/:id', component: BookDetailsPage },
+  { path: 'feed', component: FeedPage, canActivate: [authGuard] },
   { path: 'lists', component: ListsPage, canActivate: [authGuard] },
   { path: 'lists/:id', component: ListDetailsPage, canActivate: [authGuard] },
   { path: 'follows', component: FollowsPage, canActivate: [authGuard] },

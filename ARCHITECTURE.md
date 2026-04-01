@@ -52,10 +52,10 @@ Implemented endpoints include:
 - Reading status: get/upsert by book
 - Lists: create/get mine/get by id/add/remove/delete
 - Follows: follow/unfollow/get my following
+- Feed: authenticated timeline from followed users
 
 Still pending:
 
-- Feed timeline
 - Notifications
 - Reading analytics dashboard
 - Open Library integration pipeline

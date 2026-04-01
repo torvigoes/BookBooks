@@ -48,8 +48,9 @@ Current implemented slices include:
 - reading status
 - lists
 - follows
+- feed timeline
 
-Pending major slice: feed timeline.
+Pending major slices: notifications, reading analytics, and Open Library integration.
 
 Any contract changes must be reflected in:
 

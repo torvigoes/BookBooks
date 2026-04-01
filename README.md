@@ -12,6 +12,7 @@ Implemented backend/API:
 - Reading status (`get/upsert by book for authenticated user`)
 - Lists (`create`, `get mine`, `get by id`, `add/remove book`, `delete`)
 - Follows (`follow user`, `unfollow user`, `get my following`)
+- Feed (`timeline of reviews from followed users`)
 
 Frontend:
 
@@ -119,6 +120,7 @@ Notes:
 - `GET /api/follows/me` (auth)
 - `POST /api/follows/{followedUserId}` (auth)
 - `DELETE /api/follows/{followedUserId}` (auth)
+- `GET /api/feed?page=1&pageSize=20` (auth)
 
 ## Migration Priorities (Frontend)
 
@@ -126,5 +128,4 @@ Notes:
 2. Migrate auth flow (`login`, `register`)
 3. Migrate books and book details (search/create/detail + reviews)
 4. Migrate reading status and lists
-5. Migrate follows and then feed timeline
-6. Retire Blazor screens only after feature parity and validation
+5. Retire Blazor screens only after feature parity and validation

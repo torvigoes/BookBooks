@@ -81,5 +81,5 @@ Done when:
 - [x] Reading status migrated
 - [x] Lists migrated
 - [x] Follows migrated
-- [ ] Feed implemented
+- [x] Feed implemented
 - [ ] Blazor retired

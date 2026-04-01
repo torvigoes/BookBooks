@@ -7,6 +7,7 @@ public interface IReviewRepository
     Task<Review?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
     Task<IEnumerable<Review>> GetByBookIdAsync(string bookId, int page, int pageSize, CancellationToken cancellationToken = default);
     Task<IEnumerable<Review>> GetByUserIdAsync(string userId, int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Review>> GetFeedByFollowerIdAsync(string followerId, int page, int pageSize, CancellationToken cancellationToken = default);
     Task<Review?> GetUserReviewForBookAsync(string userId, string bookId, CancellationToken cancellationToken = default);
     Task<(double AverageRating, int ReviewCount)> GetBookRatingStatsAsync(string bookId, CancellationToken cancellationToken = default);
     Task<ReviewLike?> GetReviewLikeAsync(string reviewId, string userId, CancellationToken cancellationToken = default);

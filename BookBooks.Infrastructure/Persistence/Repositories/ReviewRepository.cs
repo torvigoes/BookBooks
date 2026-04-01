@@ -43,6 +43,22 @@ public class ReviewRepository : IReviewRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Review>> GetFeedByFollowerIdAsync(string followerId, int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var followedUserIds = _context.UserFollows
+            .Where(x => x.FollowerId == followerId)
+            .Select(x => x.FollowedId);
+
+        return await _context.Reviews
+            .Include(r => r.User)
+            .Include(r => r.Book)
+            .Where(r => followedUserIds.Contains(r.UserId))
+            .OrderByDescending(r => r.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+    }
+
     public Task<Review?> GetUserReviewForBookAsync(string userId, string bookId, CancellationToken cancellationToken = default)
     {
         return _context.Reviews
